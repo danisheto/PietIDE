@@ -13,6 +13,10 @@ html,body,#webpage{
 	border:solid 2px #000000;
 	margin:8px;
 	width:calc(20% - 20px);
+	user-select:none;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
 }
 #primary,#secondary{
 	position:relative;
@@ -43,13 +47,62 @@ table{
 	margin:auto;
 	border-collapse:collapse;
 	border-color:#000000;
-	user-select:none;
-	-webkit-user-select:none;
-	-moz-user-select:none;
-	-ms-user-select:none;
 }
 #commands{
 	margin-top:8px;
+}
+#zoom{
+	margin:8px 0;
+}
+#interpreterControls{
+	margin:8px 0;
+}
+.iconContainer{
+	display:inline-block;
+	background-color:#EEEEEE;
+	border:solid 1px #DDDDDD;
+	border-bottom-width:3px;
+	border-radius:2px;
+	width:40px;
+	height:40px;
+	margin:0 4px;
+}
+.iconContainer:hover{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+	position:relative;
+	top:1px;
+	border-bottom-width:2px;
+}
+.iconContainer:active{
+	top:2px;
+	border-bottom-width:1px;
+}
+.icon{
+	display:inline-block;
+	height:18px;
+	width:16px;
+	margin:11px auto 11px auto;
+}
+#zoom_in,#zoom_out{
+	margin:7.5px;
+	height:25px;
+	width:25px;
+}
+#zoom_in{
+	background-image:url(zoom_in.png);
+}
+#zoom_out{
+	background-image:url(zoom_out.png);
+}
+#play{
+	background-image:url(play.png);
+}
+#step{
+	background-image:url(step_forward.png);
+}
+#stop{
+	background-image:url(stop.png);
 }
 #container{
 	background-color:#000000;

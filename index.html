@@ -11,8 +11,10 @@
 <body>
 	<div id="webpage">
 		<div id="sidebar">
-			<div id="primary" class="active Black"></div>
-			<div id="secondary" class="W"></div>
+			<div>
+				<div id="primary" class="active Black"></div>
+				<div id="secondary" class="W"></div>
+			</div>
 			<table id="colors" border="1">
 				<tr>
 					<td id="LR">LR</td>
@@ -82,6 +84,21 @@
 					<td id="char-out52">out(char)</td>
 				</tr>
 			</table>
+			<div id="zoom">
+				<div class="iconContainer"><a class="icon" id="zoom_in"></a></div>
+				<div class="iconContainer"><a class="icon" id="zoom_out"></a></div>
+			</div>
+			<div id="interpreterControls">
+				<div class="iconContainer">
+					<a class="icon" id="play"></a>
+				</div>
+				<div class="iconContainer">
+				<a class="icon" id="step"></a>
+				</div>
+				<div class="iconContainer">
+				<a class="icon" id="stop"></a>
+				</div>
+			</div>
 		</div>
 		<div id="container">
 			<canvas id="canvas" height="200" width="200"></canvas>

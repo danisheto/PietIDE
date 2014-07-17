@@ -11,8 +11,11 @@ Canvas
 Interpreter
 
 Features currently being worked on:
-Different colors for grid
+Change number of square in canvas
+change zoom of canvas
+responsiveness
 
 Features completed
 Grid
-Fill Squares to grid
+Fill Squares in grid
+Different Colors for grid

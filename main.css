@@ -6,13 +6,146 @@ html,body,#webpage{
 #webpage{
 
 }
+#sidebar{
+	float:left;
+	text-align:center;
+	background-color:white;
+	border:solid 2px #000000;
+	margin:8px;
+	width:calc(20% - 20px);
+}
+#primary,#secondary{
+	position:relative;
+	height:40px;
+	width:40px;
+	border:solid 1px #000000;
+}
+#primary{
+	left:calc(50% - 8px);
+	top:32px;
+	z-index:0;
+	background-color:#000000;
+}
+#secondary{
+	bottom:32px;
+	left:calc(50% - 32px);
+	z-index:0;
+	background-color:#FFFFFF;
+}
+#sidebar .active{
+	z-index:1;
+}
+#BW{
+	position:relative;
+	bottom:1px;
+}
+table{
+	margin:auto;
+	border-collapse:collapse;
+	border-color:#000000;
+	user-select:none;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+}
+#commands{
+	margin-top:8px;
+}
 #container{
 	background-color:#000000;
-	height:204px;
-	width:204px;
+	height:202px;
+	width:202px;
 	margin:8px;
+	margin-left:20%;
 }
 #canvas{
 	background-color:#ffffff;
 	border:solid 2px black;
+	border-left-width:1px;
+	border-top-width:1px;
+}
+@media screen and (max-width:1175px){
+	#sidebar{
+		width:calc(30% - 20px);
+	}
+	#container{
+		margin-left:30%;
+	}
+}
+@media screen and (max-width:785px){
+	#sidebar{
+		width:calc(40% - 20px);
+	}
+	#container{
+		margin-left:40%;
+	}
+}
+#LR{
+	background-color:#FFC0C0;
+}
+#R{
+	background-color:#FF0000;
+}
+#DR{
+	background-color:#C00000;
+	color:#FFFFFF;
+}
+#LY{
+	background-color:#FFFFC0;
+}
+#Y{
+	background-color:#FFFF00;
+}
+#DY{
+	background-color:#C0C000;
+	color:#FFFFFF;
+}
+#LG{
+	background-color:#C0FFC0;
+}
+#G{
+	background-color:#00FF00;
+}
+#DG{
+	background-color:#00C000;
+}
+#LC{
+	background-color:#C0FFFF;
+}
+#C{
+	background-color:#00FFFF;
+}
+#DC{
+	background-color:#00C0C0;
+	color:#FFFFFF;
+}
+#LB{
+	background-color:#C0C0FF;
+}
+#Blue{
+	background-color:#0000FF;
+	color:#FFFFFF;
+}
+#DB{
+	background-color:#0000C0;
+	color:#FFFFFF;
+}
+#LM{
+	background-color:#FFC0FF;
+}
+#M{
+	background-color:#FF00FF;
+	color:#FFFFFF;
+}
+#DM{
+	background-color:#C000C0;
+	color:#FFFFFF;
+}
+#W{
+	background-color:#FFFFFF;
+	color:#000000;
+}
+#Black{
+	background-color:#000000;
+	color:#FFFFFF;
 }

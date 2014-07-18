@@ -90,19 +90,19 @@ table{
 	width:25px;
 }
 #zoom_in{
-	background-image:url(zoom_in.png);
+	background-image:url(https://cloud.githubusercontent.com/assets/3758652/3621832/41fb2b4c-0e20-11e4-9cb8-6de87e90183a.png);
 }
 #zoom_out{
-	background-image:url(zoom_out.png);
+	background-image:url(https://cloud.githubusercontent.com/assets/3758652/3621833/43405a7c-0e20-11e4-9a22-4c5febe8bdf4.png);
 }
 #play{
-	background-image:url(play.png);
+	background-image:url(https://cloud.githubusercontent.com/assets/3758652/3621834/4fd3bc84-0e20-11e4-97a9-b4ebd64c009a.png);
 }
 #step{
-	background-image:url(step_forward.png);
+	background-image:url(https://cloud.githubusercontent.com/assets/3758652/3621837/5a09759a-0e20-11e4-84f1-3a4328c5afd8.png);
 }
 #stop{
-	background-image:url(stop.png);
+	background-image:url(https://cloud.githubusercontent.com/assets/3758652/3621835/53a882c2-0e20-11e4-9f42-a1daf3c650b5.png);
 }
 #container{
 	background-color:#000000;

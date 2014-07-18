@@ -4,19 +4,45 @@ html,body,#webpage{
 	margin:0;
 }
 #webpage{
-
+	font-family:sans-serif;
+	font-weight:100;
+	font-size:16px;
 }
 #sidebar{
 	float:left;
+	position:relative;
+	z-index:10;
 	text-align:center;
 	background-color:white;
-	border:solid 2px #000000;
+	border:solid 2px #DDDDDD;
 	margin:8px;
+	padding:8px;
 	width:calc(20% - 20px);
 	user-select:none;
 	-webkit-user-select:none;
 	-moz-user-select:none;
 	-ms-user-select:none;
+}
+.tabContent{
+	display:none;
+}
+#tabs{
+	padding:8px 0;
+}
+#tabs a{
+	text-decoration:none;
+	color:#000000;
+	padding:8px 8px;
+	background-color:#EEEEEE;
+	border:solid 1px #DDDDDD;
+	border-radius:4px 4px 0 0;
+}
+#tabs a:hover,#tabs a:active,#tabs .active{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+}
+.tabContent.active{
+	display:block;
 }
 #primary,#secondary{
 	position:relative;
@@ -36,7 +62,7 @@ html,body,#webpage{
 	z-index:0;
 	background-color:#FFFFFF;
 }
-#sidebar .active{
+#sidebar #colorPalette .active{
 	z-index:1;
 }
 #BW{
@@ -47,14 +73,18 @@ table{
 	margin:auto;
 	border-collapse:collapse;
 	border-color:#000000;
+	border-radius:20px;
+}
+#colors td, #BW td{
+	padding:10px;
 }
 #commands{
 	margin-top:8px;
 }
-#zoom{
-	margin:8px 0;
+#commands td{
+	padding:10px 4px;
 }
-#interpreterControls{
+.buttonContainer{
 	margin:8px 0;
 }
 .iconContainer{
@@ -74,7 +104,10 @@ table{
 	top:1px;
 	border-bottom-width:2px;
 }
-.iconContainer:active{
+.iconContainer:active,.iconContainer.active{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+	position:relative;
 	top:2px;
 	border-bottom-width:1px;
 }
@@ -82,12 +115,38 @@ table{
 	display:inline-block;
 	height:18px;
 	width:16px;
-	margin:11px auto 11px auto;
+	margin:11px 0;
+}
+#brush{
+	background-image:url(brush.png);
+	width:25px;
+	height:22px;
+	margin:9px 0;
+}
+#bucket{
+	background-image:url(bucket.png);
+	width:24px;
+	height:24px;
+	background-size:24px;
+	margin:8px 0;
+}
+#eyedropper{
+	background-image:url(eyedropper.png);
+	width:24px;
+	height:24px;
+	margin:8px 0;
 }
 #zoom_in,#zoom_out{
 	margin:7.5px;
 	height:25px;
 	width:25px;
+}
+#pan{
+	background-image:url(hand.png);
+	background-size:32px;
+	height:32px;
+	width:32px;
+	margin:4px 0;
 }
 #zoom_in{
 	background-image:url(zoom_in.png);
@@ -104,19 +163,28 @@ table{
 #stop{
 	background-image:url(stop.png);
 }
-#container{
-	background-color:#000000;
-	height:202px;
-	width:202px;
-	margin:8px;
-	margin-left:20%;
+#canvasContainer{
+	margin-top:8px;
 }
 #canvas{
+	position:relative;
+	z-index:1;
 	background-color:#ffffff;
 	border:solid 2px black;
 	border-left-width:1px;
 	border-top-width:1px;
 }
+#canvas:hover{
+	cursor:pointer;
+	-webkit-cursor:pointer;
+	-moz-cursor:pointer;
+}
+#canvas:active{/*
+	cursor:grabbing;
+	-webkit-cursor:grabbing;
+	-moz-cursor:grabbing;*/
+}
+.brush
 @media screen and (max-width:1175px){
 	#sidebar{
 		width:calc(30% - 20px);

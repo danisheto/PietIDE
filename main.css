@@ -173,6 +173,10 @@ table{
 #stop{
 	background-image:url(images/stop.png);
 }
+#stack{
+	max-height:150px;
+	overflow:auto;
+}
 #canvasContainer{
 	margin-top:8px;
 	margin-left:calc(20% + 8px);
@@ -254,7 +258,7 @@ table{
 #LB{
 	background-color:#C0C0FF;
 }
-#Blue{
+#B{
 	background-color:#0000FF;
 	color:#FFFFFF;
 }

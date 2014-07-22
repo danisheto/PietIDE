@@ -42,7 +42,8 @@ window.onload=function(){
 		blockSize=1,
 		blockEnd=[],
 		DPPosition=[0,0],
-		funcToExecute="";
+		funcToExecute="",
+		stack=[];
 	for(var key in colorsId){
 		colorsValue[colorsId[key]]=key;
 	}
@@ -211,7 +212,7 @@ window.onload=function(){
 					case "C":
 						currentColorVal=[3];
 					break;
-					case "Blue":
+					case "B":
 						currentColorVal=[4];
 					break;
 					case "B":
@@ -225,7 +226,7 @@ window.onload=function(){
 					break;
 				}
 			}
-			if(colorName.length<2 || colorName=="Blue"){
+			if(colorName.length<2){
 				findHue(colorName);
 				currentColorVal[1]=1;
 			}else{
@@ -341,7 +342,7 @@ window.onload=function(){
 		this.onmousemove=null;
 	}
 	function moveDP(){
-		var blockStack=[[x,y]];
+		var blockStack=[DPPosition.slice(0)];
 		var colorSpacesCompleted=[];
 		for(var i=0;i<columns;i++){
 			colorSpacesCompleted[i]=[];
@@ -351,31 +352,45 @@ window.onload=function(){
 		}
 		while(blockStack.length){
 			var position=blockStack.pop();
-			if(colorSpacesCompleted[position[0]][position[1]] || i==50){
+			if(colorSpacesCompleted[position[0]][position[1]]){
 				continue;
 			}
-			while(--position[1] >=0 && colorSpaces[position[0]][position[1]]==lastColor){}
-			while(++position[1]<rows && colorSpaces[position[0]][position[1]]==lastColor){
+			while(position[1]-- >=0 && colorSpaces[position[0]][position[1]]==lastColor){}
+			if(CC="left" && DP=="right"){
+				blockEnd.push([position[0],position[1]]);
+			}
+			while(position[1]++<rows && colorSpaces[position[0]][position[1]]==lastColor){
 				blockSize++;
 				colorSpacesCompleted[position[0]][position[1]]=true;
 				if(position[0]>0){
 					if(colorSpaces[position[0]-1][position[1]]==lastColor){
 						blockStack.push([position[0]-1,position[1]]);
+						if(DP=="left"){
+							blockEnd.push([position[0]-1,position[1]]);
+						}
 					}
 				}
 				if(position[0]<columns-1){
 					if(colorSpaces[position[0]+1][position[1]]==lastColor){
 						blockStack.push([position[0]+1,position[1]]);
-						blockEnd.push([position[0]+1,position[1]])
+						if(DP=='right'){
+							blockEnd.push([position[0]+1,position[1]]);
+						}
 					}
 				}
+				console.log(DPPosition);
 			}
+			console.log(DPPosition)
 		}
 		blockSize--;
+		console.log(blockEnd);
 		switch(DP){
 			case "right":
 				for(var i=0;i<blockEnd.length;i++){
-					if(blockEnd[i][1]>DPPosition[1] || (blockEnd[i][1]==DPPosition[1] && blockEnd[i][0]<DPPosition[0])){
+					if(blockEnd[i][1]>DPPosition[1]){
+						DPPosition=blockEnd[i];
+					}
+					if(blockEnd[i][1]==DPPosition[1] && blockEnd[i][0]<DPPosition[0] && CC=="left"){
 						DPPosition=blockEnd[i];
 					}
 				}
@@ -387,9 +402,131 @@ window.onload=function(){
 		
 	}
 	document.getElementById("step").parentNode.onmousedown=function(e){
-		lastColor=colorSpaces[DPPosition[0]][DPPosition[0]];
+		if(funcToExecute.length>0){
+			switch(funcToExecute){
+				case "push":
+					stack.push(blockSize);
+					var newStackData=document.createElement("div");
+					newStackData.innerHTML=blockSize;
+					var el=document.getElementById("stack");
+					el.insertBefore(newStackData,el.getElementsByTagName("div")[document.getElementsByTagName("div").length-1]);
+				break;
+			}
+		}
+		lastColor=colorSpaces[DPPosition[0]][DPPosition[1]];
+		var difference=[];
+		var darkness,hue;
+		var lastColorHue;
 		blockSize=1;
+		switch(DP){
+			case "right":
+				if(DPPosition){
+
+				}
+			break;
+		}
 		moveDP();
+		switch(CC){
+			case "left":
+				switch(DP){
+					case "right":
+						if(!!colorSpaces[DPPosition[0]][DPPosition[1]-1] && colorSpaces[DPPosition[0]][DPPosition[1]-1]!="Black" && colorSpaces[DPPosition[0]][DPPosition[1]-1]!="W"){
+							var blockColor=colorSpaces[DPPosition[0]][DPPosition[1]-1];
+							console.log(blockColor)
+							if(blockColor.length<2){
+								darkness=1;
+							}else if(blockColor[0]=="L"){
+								darkness=0;
+							}else if(blockColor[0]=="D"){
+								darkness=2
+							}
+							switch(blockColor.substr(blockColor.length-1)){
+								case "R":
+									hue=0;
+								break;
+								case "Y":
+									hue=1;
+								break;
+								case "G":
+									hue=2;
+								break;
+								case "C":
+									hue=3;
+								break;
+								case "B":
+									hue=4;
+								break;
+								case "M":
+									hue=5;
+								break;
+							}
+							console.log(difference)
+						}else{
+							//step is done
+						}
+					break;
+				}
+			break;
+		}
+		if(lastColor.length<2){
+			difference[0]=(2+darkness)%3;
+		}else if(lastColor[0]=="L"){
+			difference[0]=darkness;
+		}else if(lastColor[0]="D"){
+			difference[0]=(1+darkness)%3;
+		}
+		switch(lastColor.substr(lastColor.length-1)){
+			case "R":
+				difference[1]=hue;
+			break;
+			case "Y":
+				difference[1]=(5+hue)%6;
+			break;
+			case "G":
+				difference[1]=(4+hue)%6;
+			break;
+			case "C":
+				difference[1]=(3+hue)%6;
+			break;
+			case "B":
+				difference[1]=(2+hue)%6;
+			break;
+			case "M":
+				difference[1]=(1+hue)%6;
+			break;
+		}
+		switch(difference[0]){
+			case 0:
+				switch(difference[1]){
+					case 0:
+						console.log("Error: There isn't a change in color")
+					break;
+					case 1:
+						funcToExecute="add";
+					break;
+					case 2:
+						funcToExecute="divide";
+					break;
+					case 3:
+						funcToExecute="greater";
+					break;
+					case 4:
+						funcToExecute="duplicate";
+					break;
+					case 5:
+						funcToExecute="in(char)";
+					break;
+				}
+			break;
+			case 1:
+				switch(difference[1]){
+					case 0:
+						funcToExecute="push";
+					break;
+				}
+			break;
+		}
+		document.getElementById("nextOp").getElementsByTagName("span")[0].innerHTML="Next Operation: "+funcToExecute;
 	}
 	document.getElementById("stop").parentNode.onmousedown=function(e){
 		

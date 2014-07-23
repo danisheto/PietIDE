@@ -311,7 +311,6 @@ window.onload=function(){
 	document.getElementById("zoom_out").parentNode.onmousedown=function(e){
 		context.clearRect(0,0,columns*columnSize*canvasZoom,rows*columnSize*canvasZoom);
 		for(var i=zoomValues.length;i>0;i--){
-			console.log(i)
 			if(zoomValues[i]<canvasZoom){
 				canvasZoom=zoomValues[i];
 				document.getElementById("zoomLevel").innerHTML="Zoom: "+canvasZoom*100+"%";
@@ -378,12 +377,9 @@ window.onload=function(){
 						}
 					}
 				}
-				console.log(DPPosition);
 			}
-			console.log(DPPosition)
 		}
 		blockSize--;
-		console.log(blockEnd);
 		switch(DP){
 			case "right":
 				for(var i=0;i<blockEnd.length;i++){
@@ -418,20 +414,16 @@ window.onload=function(){
 		var darkness,hue;
 		var lastColorHue;
 		blockSize=1;
-		switch(DP){
-			case "right":
-				if(DPPosition){
-
-				}
-			break;
-		}
 		moveDP();
+		console.log(CC)
 		switch(CC){
 			case "left":
 				switch(DP){
 					case "right":
-						if(!!colorSpaces[DPPosition[0]][DPPosition[1]-1] && colorSpaces[DPPosition[0]][DPPosition[1]-1]!="Black" && colorSpaces[DPPosition[0]][DPPosition[1]-1]!="W"){
-							var blockColor=colorSpaces[DPPosition[0]][DPPosition[1]-1];
+						DPPosition[1]++;
+						console.log(DPPosition);
+						if(!!colorSpaces[DPPosition[0]][DPPosition[1]] && colorSpaces[DPPosition[0]][DPPosition[1]]!="Black" && colorSpaces[DPPosition[0]][DPPosition[1]]!="W"){
+							var blockColor=colorSpaces[DPPosition[0]][DPPosition[1]];
 							console.log(blockColor)
 							if(blockColor.length<2){
 								darkness=1;

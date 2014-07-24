@@ -180,6 +180,20 @@ window.onload=function(){
 		active.style.backgroundColor=color;
 		active.classList.add(colorName);
 	}
+	document.getElementById("W").onmousedown=function(e){
+		color="#FFFFFF";
+		colorName="W";
+		var active=document.getElementById("colorPalette").getElementsByClassName("active")[0];
+		active.style.backgroundColor=color;
+		active.classList.add(colorName);
+	}
+	document.getElementById("Black").onmousedown=function(e){
+		color="#000000";
+		colorName="Black";
+		var active=document.getElementById("colorPalette").getElementsByClassName("active")[0];
+		active.style.backgroundColor=color;
+		active.classList.add(colorName);
+	}
 	//primary and secondary switching
 	document.getElementById("secondary").onmousedown=function(e){
 		colorName=e.target.classList[0];
@@ -356,7 +370,7 @@ window.onload=function(){
 				continue;
 			}
 			while(position[1]-- >=0 && colorSpaces[position[0]][position[1]]==lastColor){}
-			if(CC="left" && DP=="right"){
+			if(CC=="left" && DP=="right"){
 				blockEnd.push([position[0],position[1]]);
 			}
 			while(position[1]++<rows && colorSpaces[position[0]][position[1]]==lastColor){
@@ -378,12 +392,9 @@ window.onload=function(){
 						}
 					}
 				}
-				console.log(DPPosition);
 			}
-			console.log(DPPosition)
 		}
 		blockSize--;
-		console.log(blockEnd);
 		switch(DP){
 			case "right":
 				for(var i=0;i<blockEnd.length;i++){
@@ -460,9 +471,9 @@ window.onload=function(){
 									hue=5;
 								break;
 							}
-							console.log(difference)
 						}else{
-							//step is done
+							wait++
+							funcToExecute="wait("+wait+")";
 						}
 					break;
 				}
@@ -526,6 +537,7 @@ window.onload=function(){
 				}
 			break;
 		}
+		console.log(DPPosition)
 		document.getElementById("nextOp").getElementsByTagName("span")[0].innerHTML="Next Operation: "+funcToExecute;
 	}
 	document.getElementById("stop").parentNode.onmousedown=function(e){

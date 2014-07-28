@@ -369,7 +369,7 @@ window.onload=function(){
 				continue;
 			}
 			while(position[1]-- >=0 && colorSpaces[position[0]][position[1]]==lastColor){}
-			if(CC=="left" && DP=="right"){
+			if(CC=="left" && DP==0){
 				blockEnd.push([position[0],position[1]]);
 			}
 			while(position[1]++<rows && colorSpaces[position[0]][position[1]]==lastColor){
@@ -378,7 +378,7 @@ window.onload=function(){
 				if(position[0]>0){
 					if(colorSpaces[position[0]-1][position[1]]==lastColor){
 						blockStack.push([position[0]-1,position[1]]);
-						if(DP=="left"){
+						if(DP==2){
 							blockEnd.push([position[0]-1,position[1]]);
 						}
 					}
@@ -386,7 +386,7 @@ window.onload=function(){
 				if(position[0]<columns-1){
 					if(colorSpaces[position[0]+1][position[1]]==lastColor){
 						blockStack.push([position[0]+1,position[1]]);
-						if(DP=='right'){
+						if(DP==0){
 							blockEnd.push([position[0]+1,position[1]]);
 						}
 					}
@@ -395,7 +395,7 @@ window.onload=function(){
 		}
 		blockSize--;
 		switch(DP){
-			case "right":
+			case 0:
 				for(var i=0;i<blockEnd.length;i++){
 					if(blockEnd[i][1]>DPPosition[1]){
 						DPPosition=blockEnd[i];
@@ -429,50 +429,58 @@ window.onload=function(){
 		var lastColorHue;
 		blockSize=1;
 		moveDP();
-		console.log(CC)
-		switch(CC){
-			case "left":
-				switch(DP){
-					case "right":
-						DPPosition[1]++;
-						console.log(DPPosition);
-						if(!!colorSpaces[DPPosition[0]][DPPosition[1]] && colorSpaces[DPPosition[0]][DPPosition[1]]!="Black" && colorSpaces[DPPosition[0]][DPPosition[1]]!="W"){
-							var blockColor=colorSpaces[DPPosition[0]][DPPosition[1]];
-							console.log(blockColor)
-							if(blockColor.length<2){
-								darkness=1;
-							}else if(blockColor[0]=="L"){
-								darkness=0;
-							}else if(blockColor[0]=="D"){
-								darkness=2
-							}
-							switch(blockColor.substr(blockColor.length-1)){
-								case "R":
-									hue=0;
-								break;
-								case "Y":
-									hue=1;
-								break;
-								case "G":
-									hue=2;
-								break;
-								case "C":
-									hue=3;
-								break;
-								case "B":
-									hue=4;
-								break;
-								case "M":
-									hue=5;
-								break;
-							}
-						}else{
-							wait++
-							funcToExecute="wait("+wait+")";
-						}
-					break;
-				}
-			break;
+		DPPosition[1]--;
+		if(!!colorSpaces[DPPosition[0]][DPPosition[1]] && colorSpaces[DPPosition[0]][DPPosition[1]]!="Black" && colorSpaces[DPPosition[0]][DPPosition[1]]!="W"){
+			var blockColor=colorSpaces[DPPosition[0]][DPPosition[1]];
+			if(blockColor.length<2){
+				darkness=1;
+			}else if(blockColor[0]=="L"){
+				darkness=0;
+			}else if(blockColor[0]=="D"){
+				darkness=2
+			}
+			switch(blockColor.substr(blockColor.length-1)){
+				case "R":
+					hue=0;
+				break;
+				case "Y":
+					hue=1;
+				break;
+				case "G":
+					hue=2;
+				break;
+				case "C":
+					hue=3;
+				break;
+				case "B":
+					hue=4;
+				break;
+				case "M":
+					hue=5;
+				break;
+			}
+		}else{
+			DPPosition[1]++;
+			if(wait==8){
+				//reset
+				DP=0;
+				CC="left";
+				lastColor="";
+				wait=0;
+				blockSize=1;
+				blockEnd=[];
+				DPPosition=[0,0];
+				funcToExecute="";
+				stack=[];
+				document.getElementById("nextOp").getElementsByTagName("span")[0].innerHTML="Next Operation: noop";
+			}
+			wait++
+			if(wait%2==0){
+				DP++
+			}else{
+				CC="right"
+			}
+			funcToExecute="wait("+wait+")";
 		}
 		if(lastColor.length<2){
 			difference[0]=(2+darkness)%3;
@@ -504,9 +512,6 @@ window.onload=function(){
 		switch(difference[0]){
 			case 0:
 				switch(difference[1]){
-					case 0:
-						console.log("Error: There isn't a change in color")
-					break;
 					case 1:
 						funcToExecute="add";
 					break;
@@ -532,6 +537,8 @@ window.onload=function(){
 				}
 			break;
 		}
+		console.log(lastColor)
+		console.log(CC,DP)
 		console.log(DPPosition)
 		document.getElementById("nextOp").getElementsByTagName("span")[0].innerHTML="Next Operation: "+funcToExecute;
 	}

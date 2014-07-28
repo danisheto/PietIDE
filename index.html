@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="author" content="Ethan Seal">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div id="webpage">
+		<div id="sidebar">
+			<nav id="tabs">
+				<a href="javascript:void(0)" id="colorsTab" class="tab active">Colors</a><a href="javascript:void(0)" id="fileTab" class="tab">File/Tools</a><a href="javascript:void(0)" id="debugTab" class="tab">Debug</a>
+			</nav>
+			<div id="colorPalette">
+				<div id="primary" class="active Black"></div>
+				<div id="secondary" class="W"></div>
+			</div>
+			<div class="tabContent active" id="colorsTabContent">
+				<table id="colors" border="1">
+					<tr>
+						<td id="LR">LR</td>
+						<td id="R">Red</td>
+						<td id="DR">DR</td>
+					</tr>
+					<tr>
+						<td id="LY">LY</td>
+						<td id="Y">Yellow</td>
+						<td id="DY">DY</td>
+					</tr>
+					<tr>
+						<td id="LG">LG</td>
+						<td id="G">Green</td>
+						<td id="DG">DG</td>
+					</tr>
+					<tr>
+						<td id="LC">LC</td>
+						<td id="C">Cyan</td>
+						<td id="DC">DC</td>
+					</tr>
+					<tr>
+						<td id="LB">LB</td>
+						<td id="B">Blue</td>
+						<td id="DB">DB</td>
+					</tr>
+					<tr>
+						<td id="LM">LM</td>
+						<td id="M">Magenta</td>
+						<td id="DM">DM</td></tr>
+				</table>
+				<table id="BW" border="1">
+					<tr>
+						<td id="W">White</td>
+						<td id="Black">Black</td>
+					</tr>
+				</table>
+				<table id="commands" border="1">
+					<tr>
+						<td id="noop00">noop</td>
+						<td id="push01">push</td>
+						<td id="pop02">pop</td>
+					</tr>
+					<tr>
+						<td id="add10">add</td>
+						<td id="subtract11">subtract</td>
+						<td id="multiply12">multiply</td>
+					</tr>
+					<tr>
+						<td id="divide20">divide</td>
+						<td id="mod21">mod</td>
+						<td id="not22">not</td>
+					</tr>
+					<tr>
+						<td id="greater30">greater</td>
+						<td id="pointer32">pointer</td>
+						<td id="switch32">switch</td>
+					</tr>
+					<tr>
+						<td id="duplicate40">duplicate</td>
+						<td id="roll41">roll</td>
+						<td id="number-in42">in(num)</td>
+					</tr>
+					<tr>
+						<td id="char-in50">in(char)</td>
+						<td id="number-out51">out(num)</td>
+						<td id="char-out52">out(char)</td>
+					</tr>
+				</table>
+			</div>
+			<div class="tabContent" id="fileTabContent">
+				<div id="tools" class="buttonContainer">
+					<div class="iconContainer active"><a class="icon" id="brush"></a></div>
+					<div class="iconContainer"><a class="icon" id="bucket"></a></div>
+					<div class="iconContainer"><a class="icon" id="eyedropper"></a></div>
+					<div class="iconContainer"><a class="icon" id="pan"></a></div>
+				</div>
+				<div id="zoomSlide"><span id="zoomLevel">Zoom:100%</span>
+					<input type="range" value="100" min="10" max="500" step="5" list="zoomValues">
+					<datalist id="zoomValues">
+						<option value="25">
+						<option value="50">
+						<option value="75">
+						<option value="100">
+						<option value="125">
+						<option value="150">
+						<option value="175">
+						<option value="200">
+						<option value="250">
+						<option value="300">
+						<option value="400">
+						<option value="500">
+					</datalist>
+				</div>
+				<div class="buttonContainer">
+					<div class="iconContainer"><a class="icon" id="zoom_in"></a></div>
+					<div class="iconContainer"><a class="icon" id="zoom_out"></a></div>
+				</div>
+			</div>
+			<div class="tabContent" id="debugTabContent">
+				<div id="interpreterControls"class="buttonContainer">
+					<div class="iconContainer"><a class="icon" id="play"></a></div>
+					<div class="iconContainer"><a class="icon" id="step"></a></div>
+					<div class="iconContainer"><a class="icon" id="stop"></a></div>
+				</div>
+				<div id="nextOp">
+					<span>Next Operation: noop</span>
+				</div>
+				<div id="stack">
+					<div></div>
+				</div>
+			</div>
+		</div>
+		<div id="canvasContainer">
+			<canvas id="canvas"></canvas>
+		</div>
+	</div>
+	<script type="text/javascript" src="main.js"></script>
+</body>
+</html>

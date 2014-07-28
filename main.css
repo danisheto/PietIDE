@@ -1,0 +1,288 @@
+html,body,#webpage{
+	height:100%;
+	width:100%;
+	margin:0;
+	overflow:hidden;
+}
+#webpage{
+	font-family: 'Open Sans', sans-serif;
+	font-weight:300;
+	font-size:16px;
+}
+#sidebar{
+	float:left;
+	position:fixed;
+	max-height:calc(100% - 16px);
+	overflow:auto;
+	z-index:10;
+	text-align:center;
+	background-color:white;
+	border:solid 2px #DDDDDD;
+	margin:8px;
+	padding:8px;
+	width:calc(20% - 20px);
+	user-select:none;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+}
+.tabContent{
+	display:none;
+}
+#tabs{
+	padding:8px 0;
+}
+#tabs a{
+	text-decoration:none;
+	color:#000000;
+	padding:8px 12px;
+	background-color:#EEEEEE;
+	border:solid 1px #DDDDDD;
+	border-radius:12px 12px 0 0;
+}
+#tabs a:hover,#tabs a:active,#tabs .active{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+}
+.tabContent.active{
+	display:block;
+}
+#primary,#secondary{
+	position:relative;
+	height:40px;
+	width:40px;
+	border:solid 1px #000000;
+}
+#primary{
+	left:calc(50% - 8px);
+	top:32px;
+	z-index:0;
+	background-color:#000000;
+}
+#secondary{
+	bottom:32px;
+	left:calc(50% - 32px);
+	z-index:0;
+	background-color:#FFFFFF;
+}
+#sidebar #colorPalette .active{
+	z-index:1;
+}
+#BW{
+	position:relative;
+	bottom:1px;
+}
+table{
+	margin:auto;
+	border-collapse:collapse;
+	border-color:#000000;
+	border-radius:20px;
+}
+#colors td, #BW td{
+	padding:10px;
+}
+#commands{
+	margin-top:8px;
+}
+#commands td{
+	padding:10px 4px;
+}
+.buttonContainer{
+	margin:8px 0;
+}
+.iconContainer{
+	display:inline-block;
+	background-color:#EEEEEE;
+	border:solid 1px #DDDDDD;
+	border-bottom-width:3px;
+	border-radius:2px;
+	width:40px;
+	height:40px;
+	margin:0 4px;
+}
+.iconContainer:hover{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+	position:relative;
+	top:1px;
+	border-bottom-width:2px;
+}
+.iconContainer:active,.iconContainer.active{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+	position:relative;
+	top:2px;
+	border-bottom-width:1px;
+}
+.icon{
+	display:inline-block;
+	background-repeat:no-repeat;
+	background-position:center;
+	height:19px;
+	width:17px;
+	margin:11px 0;
+}
+#brush{
+	background-image:url(images/brush.png);
+	width:26px;
+	height:23px;
+	margin:9px 0;
+}
+#bucket{
+	background-image:url(images/bucket.png);
+	width:25px;
+	height:25px;
+	background-size:24px;
+	margin:8px 0;
+}
+#eyedropper{
+	background-image:url(images/eyedropper.png);
+	width:25px;
+	height:25px;
+	margin:8px 0;
+}
+#zoom_in,#zoom_out{
+	margin:7.5px;
+	height:26px;
+	width:26px;
+}
+#pan{
+	background-image:url(images/hand.png);
+	background-size:32px;
+	height:33px;
+	width:33px;
+	margin:4px 0;
+}
+#zoomSlide{
+	vertical-align:center;
+}
+#zoomSlide input{
+	width:88%;
+}
+#zoom_in{
+	background-image:url(images/zoom_in.png);
+}
+#zoom_out{
+	background-image:url(images/zoom_out.png);
+}
+#play{
+	background-image:url(images/play.png);
+}
+#step{
+	background-image:url(images/step_forward.png);
+}
+#stop{
+	background-color:black;
+}
+#stack{
+	max-height:150px;
+	overflow:auto;
+}
+#canvasContainer{
+	margin-top:8px;
+	margin-left:calc(20% + 8px);
+}
+#canvas{
+	position:relative;
+	z-index:1;
+	background-color:#ffffff;
+	border:solid 2px black;
+	border-left-width:1px;
+	border-top-width:1px;
+}
+#canvas:hover{
+	cursor:pointer;
+	-webkit-cursor:pointer;
+	-moz-cursor:pointer;
+}
+#canvas:active{/*
+	cursor:grabbing;
+	-webkit-cursor:grabbing;
+	-moz-cursor:grabbing;*/
+}
+.brush
+@media screen and (max-width:1175px){
+	#sidebar{
+		width:calc(30% - 20px);
+	}
+	#container{
+		margin-left:30%;
+	}
+}
+@media screen and (max-width:785px){
+	#sidebar{
+		width:calc(40% - 20px);
+	}
+	#container{
+		margin-left:40%;
+	}
+}
+#LR{
+	background-color:#FFC0C0;
+}
+#R{
+	background-color:#FF0000;
+}
+#DR{
+	background-color:#C00000;
+	color:#FFFFFF;
+}
+#LY{
+	background-color:#FFFFC0;
+}
+#Y{
+	background-color:#FFFF00;
+}
+#DY{
+	background-color:#C0C000;
+	color:#FFFFFF;
+}
+#LG{
+	background-color:#C0FFC0;
+}
+#G{
+	background-color:#00FF00;
+}
+#DG{
+	background-color:#00C000;
+}
+#LC{
+	background-color:#C0FFFF;
+}
+#C{
+	background-color:#00FFFF;
+}
+#DC{
+	background-color:#00C0C0;
+	color:#FFFFFF;
+}
+#LB{
+	background-color:#C0C0FF;
+}
+#B{
+	background-color:#0000FF;
+	color:#FFFFFF;
+}
+#DB{
+	background-color:#0000C0;
+	color:#FFFFFF;
+}
+#LM{
+	background-color:#FFC0FF;
+}
+#M{
+	background-color:#FF00FF;
+	color:#FFFFFF;
+}
+#DM{
+	background-color:#C000C0;
+	color:#FFFFFF;
+}
+#W{
+	background-color:#FFFFFF;
+	color:#000000;
+}
+#Black{
+	background-color:#000000;
+	color:#FFFFFF;
+}

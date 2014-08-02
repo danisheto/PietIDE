@@ -69,8 +69,9 @@ var canvasGrid=(function(window,document,undefined){
 	}
 	function initEvents(){
 		function stopTooling(e){
-			if(tool=="panning" && !!cursorOffset[0]){
+			if(tool=="pan" && !!cursorOffset[0]){
 				offset=[parseInt(canvas.style.left.slice(0,-2)),parseInt(canvas.style.top.slice(0,-2))]
+				cursorOffset=[];
 			}
 		}
 		canvas.onmousedown=function(e){
@@ -112,15 +113,15 @@ var canvasGrid=(function(window,document,undefined){
 					if(grid[square[0]][square[1]]!=colorHex){
 						colorHex=grid[square[0]][square[1]];
 					}
-					setColor(colorHex)
+					pietUI.setColorActive(setColor(colorHex));
 					break;
-				case "panning":
+				case "pan":
 					cursorOffset=[e.pageX,e.pageY];
 					break;
 			}
 		}
 		canvas.onmousemove=function(e){
-			if(tool=="panning" && !!cursorOffset[0]){
+			if(tool=="pan" && !!cursorOffset[0]){
 				canvas.style.left=(e.pageX-cursorOffset[0]+offset[0])+"px";
 				canvas.style.top=(e.pageY-cursorOffset[1]+offset[1])+"px";
 			}

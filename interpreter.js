@@ -141,11 +141,16 @@ var interpreter=(function(window,document,undefined){
 			anim2=setInterval(animation2,25)
 		}
 	}
+	function changeBlock(){
+		//colour block
+		//compare colors and choose function
+	}
 	function step(){
 		if(started){
-			changeBlock();//Program Execution #2-3
+			runFunction();//run function to executes
+			changeBlock();//Program Execution #3
 		}
-		movePosition(DPPosition);//Program execution #1
+		movePosition(DPPosition);//Program execution #1-2
 	}
 	function stop(){
 		clearInterval(anim)

@@ -117,7 +117,6 @@ var pietUI=(function(window,document,undefined){
 		}
 		$("#zoomSlide").$("input")[0].onchange=function(e){
 			canvasGrid.setZoom(this.value/100);
-			console.log(this.value)
 			$("#zoomLevel").innerHTML="Zoom: "+this.value+"%";
 			canvasGrid.initCanvas();
 		}
@@ -160,9 +159,15 @@ var pietUI=(function(window,document,undefined){
 			$("#debugTab").classList.add("active")
 		}
 	}
+	function setColorActive(color){
+		$("#colorPalette").$(".active")[0].style.backgroundColor=color;
+	};
 	return {
 		init:function(){
 			init();
+		},
+		setColorActive:function(color){
+			setColorActive(color);
 		}
 	}
 })(window,document)

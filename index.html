@@ -16,8 +16,8 @@
 				<a href="javascript:void(0)" id="colorsTab" class="tab active">Colors</a><a href="javascript:void(0)" id="fileTab" class="tab">File/Tools</a><a href="javascript:void(0)" id="debugTab" class="tab">Debug</a>
 			</nav>
 			<div id="colorPalette">
-				<div id="primary" class="active Black"></div>
-				<div id="secondary" class="W"></div>
+				<div id="primary" class="active"></div>
+				<div id="secondary"></div>
 			</div>
 			<div class="tabContent active" id="colorsTabContent">
 				<table id="colors" border="1">
@@ -120,7 +120,13 @@
 				</div>
 			</div>
 			<div class="tabContent" id="debugTabContent">
-				<div id="interpreterControls"class="buttonContainer">
+				<div id="I/O">
+					<input id="input" type="text">
+					<div id="output">
+						
+					</div>
+				</div>
+				<div id="interpreterControls" class="buttonContainer">
 					<div class="iconContainer"><a class="icon" id="play"></a></div>
 					<div class="iconContainer"><a class="icon" id="step"></a></div>
 					<div class="iconContainer"><a class="icon" id="stop"></a></div>
@@ -136,7 +142,13 @@
 		<div id="canvasContainer">
 			<canvas id="canvas"></canvas>
 		</div>
+		<div id="debug"></div>
 	</div>
+	<script type="text/javascript" src="../UI/main.js"></script>
+	<script type="text/javascript" src="color.js"></script>
+	<script type="text/javascript" src="canvas.js"></script>
+	<script type="text/javascript" src="UI.js"></script>
+	<script type="text/javascript" src="interpreter.js"></script>
 	<script type="text/javascript" src="main.js"></script>
 </body>
 </html>

@@ -173,6 +173,7 @@ table{
 }
 #stop{
 	background-color:black;
+	height:17px;
 }
 #stack{
 	max-height:150px;

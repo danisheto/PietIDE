@@ -19,27 +19,26 @@ var interpreter=(function(window,document,undefined){
 		grid=canvasGrid.getGrid();
 	}
 	var animation2=function(){
-		grid[DPPosition[0]][DPPosition[1]]
 		var colorRGB=new Hex(grid[DPPosition[0]][DPPosition[1]]).toRGB().rgb;
-		colorRGB[0]=parseInt(Math.sin(x*frequency)*127+127,10);
-		colorRGB[1]=parseInt(Math.sin(x*frequency+2*Math.PI/3)*127+127,10);
-		colorRGB[2]=parseInt(Math.sin(x*frequency+4*Math.PI/3)*127+127,10);
+		colorRGB[0]=parseInt(Math.cos(x*frequency)*127+127,10);
+		colorRGB[1]=parseInt(Math.cos(x*frequency+2*Math.PI/3)*127+127,10);
+		colorRGB[2]=parseInt(Math.cos(x*frequency+4*Math.PI/3)*127+127,10);
 		x++;
 		canvasGrid.setSquare(DPPosition[0],DPPosition[1],lastColor,new RGB("rgb("+colorRGB.join(",")+")").toHex())
 		return colorRGB
 	}
 	var animation=function(){
-		grid[DPPosition[0]][DPPosition[1]]
 		var colorRGB=new Hex(grid[DPPosition[0]][DPPosition[1]]).toRGB().rgb;
-		colorRGB[0]=parseInt(Math.sin(x*frequency)*127+127,10);
-		colorRGB[1]=parseInt(Math.sin(x*frequency)*127+127,10);
-		colorRGB[2]=parseInt(Math.sin(x*frequency)*127+127,10);
+		colorRGB[0]=parseInt(Math.cos(x*frequency/2)*127+127,10);
+		colorRGB[1]=parseInt(Math.cos(x*frequency/2)*127+127,10);
+		colorRGB[2]=parseInt(Math.cos(x*frequency/2)*127+127,10);
 		x++;
 		canvasGrid.setSquare(lastDPPosition[0],lastDPPosition[1],lastColor,new RGB("rgb("+colorRGB.join(",")+")").toHex())
 		return colorRGB
 	}
 	function movePosition(position){
 		lastDPPosition=DPPosition
+		lastColor=grid[lastDPPosition[0]][lastDPPosition[1]];
 		var blockEnd=[];
 		var blockStack=[position.slice(0)];
 		var gridIterated=[];
@@ -56,7 +55,7 @@ var interpreter=(function(window,document,undefined){
 			}
 			while(--p[1]>=0 && grid[p[0]][p[1]]==lastColor){};
 			if(!CC && DP==0 || CC && DP==2 || DP==3){
-				if(!!grid[p[0]][p[1]+1] && grid[p[0]][p[1]]==lastColor){
+				if(!!grid[p[0]][p[1]+1] && grid[p[0]][p[1]+1]==lastColor){
 					blockEnd.push([p[0],p[1]+1])
 				}
 			}
@@ -85,52 +84,51 @@ var interpreter=(function(window,document,undefined){
 			}
 		}
 		blockSize--;
-		console.log(blockEnd)
 		switch(DP){
 			case 0:
 				for(var i=0;i<blockEnd.length;i++){
-					if(blockEnd[i][0]>DPPosition[0]){
+					if(blockEnd[i][0]>nextDPPosition[0]){
 						nextDPPosition=blockEnd[i];
 					}
-					if(blockEnd[i][0]==DPPosition[0] && blockEnd[i][1]<DPPosition[1] && !CC){
+					if(blockEnd[i][0]==nextDPPosition[0] && blockEnd[i][1]<nextDPPosition[1] && !CC){
 						nextDPPosition=blockEnd[i];
-					}else if(blockEnd[i][0]==DPPosition[0] && blockEnd[i][1]>DPPosition[1] && CC){
+					}else if(blockEnd[i][0]==nextDPPosition[0] && blockEnd[i][1]>nextDPPosition[1] && CC){
 						nextDPPosition=blockEnd[i];
 					}
 				}
 			break;
 			case 1:
 				for(var i=0;i<blockEnd.length;i++){
-					if(blockEnd[i][1]>DPPosition[1]){
+					if(blockEnd[i][1]>nextDPPosition[1]){
 						nextDPPosition=blockEnd[i];
 					}
-					if(blockEnd[i][1]==DPPosition[1] && blockEnd[i][0]>DPPosition[0] && !CC){
+					if(blockEnd[i][1]==nextDPPosition[1] && blockEnd[i][0]>nextDPPosition[0] && !CC){
 						nextDPPosition=blockEnd[i];
-					}else if(blockEnd[i][1]==DPPosition[1] && blockEnd[i][0]<DPPosition[0] && CC){
+					}else if(blockEnd[i][1]==nextDPPosition[1] && blockEnd[i][0]<nextDPPosition[0] && CC){
 						nextDPPosition=blockEnd[i]
 					}
 				}
 			break;
 			case 2:
 				for(var i=0;i<blockEnd.length;i++){
-					if(blockEnd[i][0]<DPPosition[0]){
+					if(blockEnd[i][0]<nextDPPosition[0]){
 						nextDPPosition=blockEnd[i];
 					}
-					if(blockEnd[i][0]==DPPosition[0] && blockEnd[i][1]<DPPosition[1] && CC){
+					if(blockEnd[i][0]==nextDPPosition[0] && blockEnd[i][1]<nextDPPosition[1] && CC){
 						nextDPPosition=blockEnd[i];
-					}else if(blockEnd[i][0]==DPPosition[0] && blockEnd[i][1]>DPPosition[1] && !CC){
+					}else if(blockEnd[i][0]==nextDPPosition[0] && blockEnd[i][1]>nextDPPosition[1] && !CC){
 						nextDPPosition=blockEnd[i];
 					}
 				}
 			break;
 			case 3:
 				for(var i=0;i<blockEnd.length;i++){
-					if(blockEnd[i][1]<DPPosition[1]){
+					if(blockEnd[i][1]<nextDPPosition[1]){
 						nextDPPosition=blockEnd[i];
 					}
-					if(blockEnd[i][1]==DPPosition[1] && blockEnd[i][0]>DPPosition[0] && CC){
+					if(blockEnd[i][1]==nextDPPosition[1] && blockEnd[i][0]>nextDPPosition[0] && CC){
 						nextDPPosition=blockEnd[i];
-					}else if(blockEnd[i][1]==DPPosition[1] && blockEnd[i][0]<DPPosition[0] && !CC){
+					}else if(blockEnd[i][1]==nextDPPosition[1] && blockEnd[i][0]<nextDPPosition[0] && !CC){
 						nextDPPosition=blockEnd[i]
 					}
 				}
@@ -139,10 +137,9 @@ var interpreter=(function(window,document,undefined){
 		if(DPPosition!=nextDPPosition){
 			lastDPPosition=DPPosition;
 			DPPosition=nextDPPosition;
-			console.log(nextDPPosition)
+			anim=setInterval(animation,25)
+			anim2=setInterval(animation2,25)
 		}
-		anim=setInterval(animation,25)
-		anim2=setInterval(animation2,25)
 	}
 	function step(){
 		if(started){

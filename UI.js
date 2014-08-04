@@ -133,7 +133,7 @@ var pietUI=(function(window,document,undefined){
 	}
 	function updateStack(stack){
 		$("#stack").innerHTML="";
-		for(var i=stack.length;i>0;i--){
+		for(var i=stack.length-1;i>=0;i--){
 			$("#stack").innerHTML+="<div>"+stack[i]+"</div>";
 		}
 	}

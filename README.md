@@ -7,7 +7,9 @@ Features:
 UI
 
 Features to Add:
-Interpreter
+Interpreter-whitespace and restrictions
+Grid Coordinate System
+Animations for Position movement-show flow
 
 Features currently being worked on:
-Interpreter-Codel Chooser
+Interpreter-whitespace and restrictions

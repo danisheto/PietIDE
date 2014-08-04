@@ -2,4 +2,29 @@ window.onload=function(){
 	canvasGrid.init();
 	pietUI.init();
 	interpreter.init();
+	test=function(){
+		canvasGrid.setSquare(0,0,"#ff0000");
+		canvasGrid.setSquare(1,0,"#ff0000");
+		canvasGrid.setSquare(1,1,"#ff0000");
+		canvasGrid.setSquare(1,2,"#ff0000");
+		canvasGrid.setSquare(2,2,"#ff0000");
+		canvasGrid.setSquare(2,1,"#c00000");
+		canvasGrid.setSquare(3,1,"#c00000");
+		canvasGrid.setSquare(3,2,"#c00000");
+		canvasGrid.setSquare(3,3,"#c00000");
+		canvasGrid.setSquare(4,3,"#c00000");
+		canvasGrid.setSquare(4,2,"#ffc0c0");
+		canvasGrid.setSquare(5,2,"#ffc0c0");
+		canvasGrid.setSquare(6,2,"#ffc0c0");
+		canvasGrid.setSquare(6,1,"#ff0000");
+		canvasGrid.setSquare(7,1,"#ff0000");
+		canvasGrid.setSquare(8,1,"#ff0000");
+		canvasGrid.setSquare(8,0,"#c00000");
+		canvasGrid.setSquare(9,0,"#c00000");
+		canvasGrid.setSquare(9,1,"#c00000");
+		canvasGrid.setSquare(10,1,"#c00000");
+		canvasGrid.setColor("#c00000");
+		pietUI.setColorActive("#c00000")
+	}
+	test();
 }

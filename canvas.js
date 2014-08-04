@@ -41,7 +41,7 @@ var canvasGrid=(function(window,document,undefined){
 				for(var i=0;i<size[0];i++){
 					grid[i]=[];
 					for(var j=0;j<size[1];j++){
-						grid[i][j]="#FFFFFF";
+						grid[i][j]="#ffffff";
 					}
 				}
 			}

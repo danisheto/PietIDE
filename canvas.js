@@ -137,11 +137,11 @@ var canvasGrid=(function(window,document,undefined){
 		if(typeof color=="string" && color[0]=="#" && color.length==7){
 			colorHex=color;
 		}else{
-			console.error("Error: color not in proper hex format: /#[\dA-Fa-f]{6}/")
+			console.error("Error: color not in proper hex format: /#[\dA-Fa-f]{6}/", color)
 		}
 		return color;
 	}
-	function getColor(){
+	function getCurrentColor(){
 		return colorHex
 	}
 	function setZoom(value){
@@ -160,6 +160,41 @@ var canvasGrid=(function(window,document,undefined){
 		context.clearRect(x*zoom*squareSize+1.5,y*zoom*squareSize+1.5,squareSize*zoom-2,squareSize*zoom-2)
 		draw(x,y,color,secondColor);
 	}
+	function getColorDetails(color){
+		colorValue=[];
+		//check if contains red
+		if(color.slice(1,3).search(/[Ff].*/g)>-1 || color.search(/#[cC]0[^fF]{4}/)>-1){
+			colorValue=[0]
+		}
+		//check if contains green
+		if(color.slice(3,5).search(/[Ff].*/g)>-1 || color.search(/#[^fF]{2}[cC]0[^fF]{2}/)>-1){
+			//and mixes if already contains a color
+			if(colorValue[0]==0){
+				colorValue[0]++;
+			}else{
+				colorValue[0]=2;
+			}
+		}
+		//check if contains blue
+		if(color.slice(5,7).search(/[fF]{2}/)>-1 || color.search(/#[^fF]{4}[cC]0/)>-1){
+			//and mixes if already contains a color
+			if(colorValue[0]==2){
+				colorValue[0]++;
+			}else if(colorValue[0]==0){
+				colorValue[0]=5;
+			}else{
+				colorValue[0]=4;
+			}
+		}
+		if(color.search(/#.*[0Ff]{6}.*/g)>-1){
+			colorValue[1]=1
+		}else if(color.search(/#.*[0Cc]{6}.*/g)>-1){
+			colorValue[1]=2
+		}else{
+			colorValue[1]=0
+		}
+		return colorValue
+	}
 	return {
 		init:function(){
 			return init();
@@ -173,8 +208,8 @@ var canvasGrid=(function(window,document,undefined){
 		setColor:function(color){
 			return setColor(color)
 		},
-		getColor:function(){
-			return getColor();
+		getCurrentColor:function(){
+			return getCurrentColor();
 		},
 		setZoom:function(value){
 			return setZoom(value);
@@ -190,6 +225,9 @@ var canvasGrid=(function(window,document,undefined){
 		},
 		setSquare:function(x,y,color,secondColor){
 			return setSquare(x,y,color,secondColor)
+		},
+		getColorDetails:function(colorHex){
+			return getColorDetails(colorHex);
 		}
 	}
 })(window, document);

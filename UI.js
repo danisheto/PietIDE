@@ -26,40 +26,9 @@ var pietUI=(function(window,document,undefined){
 			$("#colorPalette").$(".active")[0].style.backgroundColor=canvasGrid.setColor(window.getComputedStyle(this).getPropertyValue("background-color"));
 		}
 		$("#commands").onmousedown=function(e){
-			if(canvasGrid.getColor()!="#000000" && canvasGrid.getColor().toLowerCase()!="#FFFFFF"){
+			if(canvasGrid.getCurrentColor()!="#000000" && canvasGrid.getCurrentColor().toLowerCase()!="#FFFFFF"){
 				command=e.target.id.slice(-2).split("");
-				colorValue=[];
-				//check if contains red
-				if(canvasGrid.getColor().slice(1,3).search(/[Ff].*/g)>-1 || canvasGrid.getColor().search(/#[cC]0[^fF]{4}/)>-1){
-					colorValue=[0]
-				}
-				//check if contains green
-				if(canvasGrid.getColor().slice(3,5).search(/[Ff].*/g)>-1 || canvasGrid.getColor().search(/#[^fF]{2}[cC]0[^fF]{2}/)>-1){
-					//and mixes if already contains a color
-					if(colorValue[0]==0){
-						colorValue[0]++;
-					}else{
-						colorValue[0]=2;
-					}
-				}
-				//check if contains blue
-				if(canvasGrid.getColor().slice(5,7).search(/[fF]{2}/)>-1 || canvasGrid.getColor().search(/#[^fF]{4}[cC]0/)>-1){
-					//and mixes if already contains a color
-					if(colorValue[0]==2){
-						colorValue[0]++;
-					}else if(colorValue[0]==0){
-						colorValue[0]=5;
-					}else{
-						colorValue[0]=4;
-					}
-				}
-				if(canvasGrid.getColor().search(/#.*[0Ff]{6}.*/g)>-1){
-					colorValue[1]=1
-				}else if(canvasGrid.getColor().search(/#.*[0Cc]{6}.*/g)>-1){
-					colorValue[1]=2
-				}else{
-					colorValue[1]=0
-				}
+				colorValue=canvasGrid.getColorDetails(canvasGrid.getCurrentColor());
 				colorValue[0]+=parseInt(command[0],10);
 				colorValue[1]+=parseInt(command[1],10);
 				colorValue[0]%=6;
@@ -161,13 +130,22 @@ var pietUI=(function(window,document,undefined){
 	}
 	function setColorActive(color){
 		$("#colorPalette").$(".active")[0].style.backgroundColor=color;
-	};
+	}
+	function updateStack(stack){
+		$("#stack").innerHTML="";
+		for(var i=stack.length;i>0;i--){
+			$("#stack").innerHTML+="<div>"+stack[i]+"</div>";
+		}
+	}
 	return {
 		init:function(){
 			init();
 		},
 		setColorActive:function(color){
 			setColorActive(color);
+		},
+		updateStack:function(stack){
+			updateStack(stack);
 		}
 	}
 })(window,document)

@@ -8,7 +8,8 @@ var interpreter=(function(window,document,undefined){
 		lastColor="",
 		wait=0,
 		blockSize=1,
-		funcToExecute="",
+		funcToExecute=function(){},
+		funcToExecuteName="",
 		stack=[],
 		started=false,
 		anim=null,
@@ -139,18 +140,259 @@ var interpreter=(function(window,document,undefined){
 			DPPosition=nextDPPosition;
 			anim=setInterval(animation,25)
 			anim2=setInterval(animation2,25)
+			started=true;
 		}
 	}
 	function changeBlock(){
-		//colour block
+		//choose colour block
 		//compare colors and choose function
+		var codel;
+		switch(DP){
+			case 0:
+				switch(CC){
+					case false:
+						codel=[DPPosition[0],DPPosition[1]-1]
+						break;
+					case true:
+						codel=[DPPosition[0],DPPosition[1]+1]
+						break;
+				}
+				break;
+			case 1:
+				switch(CC){
+					case false:
+						codel=[DPPosition[0]+1,DPPosition[1]]
+						break;
+					case true:
+						codel=[DPPosition[0]-1,DPPosition[1]]
+						break;
+				}
+				break;
+			case 2:
+				switch(CC){
+					case false:
+						codel=[DPPosition[0],DPPosition[1]+1]
+						break;
+					case true:
+						codel=[DPPosition[0],DPPosition[1]-1]
+						break;
+				}
+				break;
+			case 3:
+				switch(CC){
+					case false:
+						codel=[DPPosition[0]-1,DPPosition[1]]
+						break;
+					case true:
+						codel=[DPPosition[0]+1,DPPosition[1]]
+						break;
+				}
+				break;
+		}
+		currentColorValues=canvasGrid.getColorDetails(grid[DPPosition[0]][DPPosition[1]]);
+		codelColorValues=canvasGrid.getColorDetails(grid[codel[0]][codel[1]]);
+		difference=[(3+codelColorValues[0]-currentColorValues[0])%3, (6+codelColorValues[1]-currentColorValues[1])%6];
+		console.log($.equal(difference,[0,1]))
+		switch(true){
+			case $.equal(difference,[0,1]):
+				functionToExec=function(){
+					//push
+					stack.push(blockSize);
+					pietUI.updateStack(stack);
+				}
+				funcToExecuteName="push";
+				break;
+			case $.equal(difference,[0,2]):
+				functionToExec=function(){
+					//pop
+					if(stack.length>0){
+						stack.pop();
+						pietUI.updateStack(stack)
+					}
+				}
+				funcToExecuteName="pop";
+				break;
+			case $.equal(difference,[1,0]):
+				functionToExec=function(){
+					//add
+					if(stack.length>1){
+						stack.push(stack.pop()+stack.pop());
+						pietUI.updateStack(stack)
+					}
+				}
+				funcToExecuteName="add";
+				break;
+			case $.equal(difference,[1,1]):
+				functionToExec=function(){
+					//subtract
+					if(stack.length>1){
+						n1=stack.pop();
+						n2=stack.pop();
+						stack.push(n2-n1);
+						pietUI.updateStack(stack)
+					}
+				}
+				funcToExecuteName="subtract";
+				break;
+			case $.equal(difference,[1,2]):
+				functionToExec=function(){
+					//multiply
+					if(stack.length>1){
+						stack.push(stack.pop()*stack.pop());
+						pietUI.updateStack(stack)
+					}
+				}
+				funcToExecuteName="multiply";
+				break;
+			case $.equal(difference,[2,0]):
+				functionToExec=function(){
+					//divide
+					if(stack.length>1){
+						n1=stack.pop();
+						n2=stack.pop();
+						stack.push(n2/n1);
+						pietUI.updateStack(stack)
+					}
+				}
+				funcToExecuteName="divide";
+				break;
+			case $.equal(difference,[2,1]):
+				functionToExec=function(){
+					//mod
+					if(stack.length>1){
+						n1=stack.pop();
+						n2=stack.pop();
+						stack.push(n2%n1);
+						pietUI.updateStack(stack)
+					}
+				}
+				funcToExecuteName="mod";
+				break;
+			case $.equal(difference,[2,2]):
+				functionToExec=function(){
+					//not
+					if(stack.length>0){
+						n1=stack.pop();
+						stack.push(!n1 ? 1 : 0);
+						pietUI.updateStack(stack);
+					}
+				}
+				funcToExecuteName="not";
+				break;
+			case $.equal(difference,[3,0]):
+				functionToExec=function(){
+					//greater
+					if(stack.length>1){
+						n1=stack.pop();
+						n2=stack.pop();
+						stack.push((n2>n1)?1:0);
+						pietUI.updateStack(stack);
+					}
+				}
+				funcToExecuteName="greater";
+				break;
+			case $.equal(difference,[3,1]):
+				functionToExec=function(){
+					//pointer
+					if(stack.length>0){
+						DP=DP+stack.pop()%4;
+						while(DP<0){
+							DP+=4;
+						}
+					}
+				}
+				funcToExecuteName="pointer";
+				break;
+			case $.equal(difference,[3,2]):
+				functionToExec=function(){
+					//switch
+					if(stack.length>0){
+						for(var i=0;i<stack.pop();i++){
+							CC=!CC;
+						}
+					}
+				}
+				funcToExecuteName="switch";
+				break;
+			case $.equal(difference,[4,0]):
+				functionToExec=function(){
+					//duplicate
+					if(stack.length>0){
+						var n1=stack.pop();
+						stack.push(n1);
+						stack.push(n1);
+					}
+				}
+				funcToExecuteName="duplicate";
+				break;
+			case $.equal(difference,[4,1]):
+				functionToExec=function(){
+					//roll
+					if(stack.length>1){
+						n1=stack.pop();
+						n2=stack.pop();
+						for(var i=0;i<n1;i++){
+							var el=stack.splice(-1,1);
+							stack.splice(0-n2,0,el);
+						}
+					}
+				}
+				funcToExecuteName="roll";
+				break;
+			case $.equal(difference,[4,2]):
+				functionToExec=function(){
+					//in(num)
+					if($("input").value!="" && /^\d*$/.test($("input").value){
+						stack.push($("input").value[0])
+					}else if($("input").value==""){
+						console.error("Error: nothing in STDIN");
+					}else if(!/^\d*$/.test($("input").value)){
+						console.error($("input").value+" contains characters other than digits, including spaces");
+					}else{
+						console.error("Error: Input error");
+					}
+				}
+				funcToExecuteName="in(num)";
+				break;
+			case $.equal(difference,[5,0]):
+				functionToExec=function(){
+					//in(char)
+					if($("input").value!=""){
+						stack.push($("input").value[0])
+					}else if($("input").value==""){
+						console.error("Error: nothing in STDIN");
+					}else{
+						console.error("Error: Input error");
+					}
+				}
+				funcToExecuteName="in(char)";
+				break;
+			case $.equal(difference,[5,1]):
+				functionToExec=function(){
+					//out(num)
+					if(stack.length>0){
+
+					}
+				}
+				funcToExecuteName="out(num)";
+				break;
+			case $.equal(difference,[5,2]):
+				functionToExec=function(){
+					//out(char)
+					fromCharCode
+				}
+				funcToExecuteName="out(char)";
+				break;
+		}
 	}
 	function step(){
 		if(started){
-			runFunction();//run function to executes
-			changeBlock();//Program Execution #3
+			functionToExec.call(this)
+			blockSize=1;
+			// runFunction();//run function to executes
 		}
 		movePosition(DPPosition);//Program execution #1-2
+		changeBlock();//Program Execution #3
 	}
 	function stop(){
 		clearInterval(anim)

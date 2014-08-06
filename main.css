@@ -122,27 +122,86 @@ table{
 	width:17px;
 	margin:11px 0;
 }
+#new{
+	background-image:url(images/plus.png);
+	height:20px;
+	width:20px;
+	margin:10px 0;
+}
+#save{
+	background-image:url(images/save.png);
+	height:20px;
+	width:20px;
+	margin:10px 0;
+}
+#save.running{
+	background-image:url(images/loading.gif);
+	background-size:100px;
+	height:40px;
+	width:40px;
+	margin:0;
+}
+#save.done{
+	background-image:url(images/saved.png);
+	height:20px;
+	width:20px;
+	margin:10px 0;
+}
+#load{
+	background-image:url(images/folder_closed.png);
+	width:24px;
+	height:22px;
+	margin:9px 0;
+}
+#loadOptions{
+	display:none;
+	position:fixed;
+	background-color:white;
+	z-index:10;
+	padding:4px 10px 7px 10px;
+	border-radius:3px;
+	border:solid 1px #BBB;
+	left:13.2%;
+	margin-top:-2px;
+}
+#loadOptions a{
+	display:block;
+	margin:10px;
+	color:#444;
+	text-decoration:none;
+	border-bottom:dotted 1px #C0C0C0;
+}
+#loadOptions a:hover{
+	color:#000;
+	border-bottom:dotted 1px #404040;
+}
+#load.active{
+	background-image:url(images/folder_open.png);
+	width:30px;
+	height:22px;
+	margin:9px 0;
+}
 #brush{
 	background-image:url(images/brush.png);
 	width:26px;
 	height:23px;
-	margin:9px 0;
+	margin:8.5px 0;
 }
 #bucket{
 	background-image:url(images/bucket.png);
+	background-size:25px;
 	width:25px;
 	height:25px;
-	background-size:24px;
-	margin:8px 0;
+	margin:7.5px 0;
 }
 #eyedropper{
 	background-image:url(images/eyedropper.png);
 	width:25px;
 	height:25px;
-	margin:8px 0;
+	margin:7.5px 0;
 }
 #zoom_in,#zoom_out{
-	margin:7.5px;
+	margin:7px 0;
 	height:26px;
 	width:26px;
 }
@@ -151,7 +210,7 @@ table{
 	background-size:32px;
 	height:33px;
 	width:33px;
-	margin:4px 0;
+	margin:4px 2px 4px 0;
 }
 #zoomSlide{
 	vertical-align:center;

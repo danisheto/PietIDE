@@ -13,24 +13,17 @@ var interpreter=(function(window,document,undefined){
 		functionToExecuteName="",
 		stack=[],
 		started=false,
-		anim=new animDaemon(),
-		anim2=new animDaemon(),
-		anim3=new animDaemon(),
 		frequency=0.05,
 		x=0.00
 	function init(){
 		grid=canvasGrid.getGrid();
 	}
-	function animDaemon(affecting, func){
-		this.func=func;
-		this.affecting=affecting;
-	}
-	function movePosition(position){
-		lastDPPosition=nextDPPosition
+	function movePosition(){
+		lastDPPosition=nextDPPosition;
 		lastColor=color;
 		color=grid[lastDPPosition[0]][lastDPPosition[1]];
 		var blockEnd=[];
-		var blockStack=[position.slice(0)];
+		var blockStack=[lastDPPosition.slice(0)];
 		var gridIterated=[];
 		for(var i=0;i<grid.length;i++){
 			gridIterated[i]=[];
@@ -125,29 +118,7 @@ var interpreter=(function(window,document,undefined){
 				}
 			break;
 		}
-		console.log(DPPosition)
 		if(lastDPPosition!=DPPosition){
-			// if(!!anim.affecting){
-			// 	stop();
-			// }
-			// anim=new animDaemon(setInterval(function(){
-			// 	var colorRGB=new Hex(grid[DPPosition[0]][DPPosition[1]]).toRGB().rgb;
-			// 	colorRGB[0]=parseInt(Math.cos(x*frequency)*127+127,10);
-			// 	colorRGB[1]=parseInt(Math.cos(x*frequency)*127+127,10);
-			// 	colorRGB[2]=parseInt(Math.cos(x*frequency)*127+127,10);
-			// 	x++;
-			// 	canvasGrid.setSquare(lastDPPosition[0],lastDPPosition[1],color,new RGB("rgb("+colorRGB.join(",")+")").toHex())
-			// 	return colorRGB
-			// },25),DPPosition);
-			// anim2=new animDaemon(setInterval(function(){
-			// 	var colorRGB=new Hex(grid[DPPosition[0]][DPPosition[1]]).toRGB().rgb;
-			// 	colorRGB[0]=parseInt(Math.cos(x*frequency)*127+127,10);
-			// 	colorRGB[1]=parseInt(Math.cos(x*frequency+2*Math.PI/3)*127+127,10);
-			// 	colorRGB[2]=parseInt(Math.cos(x*frequency+4*Math.PI/3)*127+127,10);
-			// 	x++;
-			// 	canvasGrid.setSquare(DPPosition[0],DPPosition[1],color,new RGB("rgb("+colorRGB.join(",")+")").toHex())
-			// 	return colorRGB
-			// },25),DPPosition);
 			started=true;
 		}
 	}
@@ -197,13 +168,12 @@ var interpreter=(function(window,document,undefined){
 				}
 				break;
 		}
-		if(grid[codel[0]] && !!grid[codel[0]][codel[1]] && grid[codel[0]][codel[1]].toLowerCase()!="#ffffff"){
-			console.log(DPPosition[0],DPPosition[1],codel,grid)
+		if(!!grid[codel[0]] && !!grid[codel[0]][codel[1]] && grid[codel[0]][codel[1]].toLowerCase()!="#ffffff" && grid[codel[0]][codel[1]]!="#000000"){
+			wait=0;
 			currentColorValues=canvasGrid.getColorDetails(grid[DPPosition[0]][DPPosition[1]]);
 			codelColorValues=canvasGrid.getColorDetails(grid[codel[0]][codel[1]]);
 			difference=[(6+codelColorValues[0]-currentColorValues[0])%6, (3+codelColorValues[1]-currentColorValues[1])%3];
 			nextDPPosition=codel;
-			console.log(difference,currentColorValues,codelColorValues)
 			switch(true){
 				case $.equal(difference,[0,1]):
 					functionToExecute=function(){
@@ -408,22 +378,60 @@ var interpreter=(function(window,document,undefined){
 					functionToExecuteName="out(char)";
 					break;
 			}
-			// anim3=new animDaemon(setInterval(function(){
-			// 	var colorRGB=new Hex(grid[codel[0]][codel[1]]).toRGB().rgb;
-			// 	colorRGB[0]=parseInt(Math.cos(x*frequency+5)*127+127,10);
-			// 	colorRGB[1]=parseInt(Math.cos(x*frequency+5)*127+127,10);
-			// 	colorRGB[2]=parseInt(Math.cos(x*frequency+5)*127+127,10);
-			// 	x+=2/3;
-			// 	canvasGrid.setSquare(codel[0],codel[1],color,new RGB("rgb("+colorRGB.join(",")+")").toHex())
-			// 	return colorRGB
-			// },25), codel);
 			$("#nextOp").$("span")[0].innerHTML="Next Operation: "+functionToExecuteName;
+		}else if(!!grid[codel[0]] && !!grid[codel[0]][codel[1]] && grid[codel[0]][codel[1]].toLowerCase()=="#ffffff"){
+			var add=(function(){
+					switch(DP){
+						case 0:
+							return function(){
+								codel[0]++;
+							}
+						break;
+						case 1:
+							return function(){
+								codel[1]++;
+							}
+						break;
+						case 2:
+							return function(){
+								codel[0]--;
+							}
+						break;
+						case 3:
+							return function(){
+								codel[1]--;
+							}
+						break;
+					}		
+				})();
+			while(!!grid[codel[0]] && !!grid[codel[0]][codel[1]] && grid[codel[0]][codel[1]]=="#ffffff"){
+				add();
+			}
+			if(!grid[codel[0]] || !grid[codel[0]][codel[1]]){
+				wait++;
+				functionToExecute=function(){};
+				functionToExecuteName="wait("+wait+")";
+				$("#nextOp").$("span")[0].innerHTML="Next Operation: "+functionToExecuteName;
+				if(wait%2==0){
+					DP=(DP+1)%4;
+				}else{
+					CC=!CC;
+				}
+			}else{
+				wait=0
+				nextDPPosition=codel;
+				functionToExecute=function(){};
+				functionToExecuteName="noop";
+				$("#nextOp").$("span")[0].innerHTML="Next Operation: "+functionToExecuteName;
+			}
 		}else{
 			nextDPPosition=DPPosition;
 			wait++;
-			$("#nextOp").$("span")[0].innerHTML="Next Operation: wait("+wait+")";
+			functionToExecute=function(){};
+			functionToExecuteName="wait("+wait+")";
+			$("#nextOp").$("span")[0].innerHTML="Next Operation: "+functionToExecuteName;
 			if(wait%2==0){
-				DP=DP+1%4;
+				DP=(DP+1)%4;
 			}else{
 				CC=!CC;
 			}
@@ -435,19 +443,12 @@ var interpreter=(function(window,document,undefined){
 			blockSize=1;
 			// runFunction();//run function to executes
 		}
-		console.log(lastDPPosition, DPPosition, nextDPPosition)
-		movePosition(DPPosition);//Program execution #1-2
-		console.log(lastDPPosition, DPPosition, nextDPPosition)
+		movePosition();//Program execution #1-2
 		changeBlock();//Program Execution #3
-		console.log(lastDPPosition, DPPosition, nextDPPosition)
+		console.log(lastDPPosition,DPPosition,nextDPPosition)
+		console.log(DP,CC)
 	}
 	function stop(){
-		console.log(DPPosition,lastColor)
-		clearInterval(anim.func)
-		clearInterval(anim2.func)
-		console.log(anim)
-		canvasGrid.setSquare(anim.affecting[0],anim.affecting[1],lastColor,lastColor);
-		canvasGrid.setSquare(anim2.affecting[0],anim2.affecting[1],lastColor,lastColor);
 	}
 	return {
 		init:function(){

@@ -35,8 +35,12 @@ var canvasGrid=(function(window,document,undefined){
 			context.stroke();
 		}
 		if(!grid[size[0]-1]){
-			if(window['localStorage']!=null && !!window.localStorage["grid"]){
-				grid=window.localStorage["grid"]
+			if(window['localStorage']!=null && !!window.localStorage["dates"]){
+				dates=JSON.parse(window.localStorage["dates"])
+				lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
+				grid=lastDate.grid
+				offset=lastDate.canvasOffset;
+				cursorOffset=lastDate.canvasCursorOffset;
 			}else{
 				for(var i=0;i<size[0];i++){
 					grid[i]=[];
@@ -86,11 +90,13 @@ var canvasGrid=(function(window,document,undefined){
 			]
 			switch(tool){
 				case "brush":
+					$("#save").classList.remove("done");
 					if(position[0]>=0 && position[1]>=0 && grid[square[0]][square[1]]!=colorHex){
 						draw(square[0],square[1]);
 					}
 					break;
 				case "bucket":
+					$("#save").classList.remove("done");
 					var stack=[square];
 					var colorPicked=grid[square[0]][square[1]];
 					while(stack.length){
@@ -110,6 +116,7 @@ var canvasGrid=(function(window,document,undefined){
 					}
 					break;
 				case "eyedropper":
+					$("#save").classList.remove("done");
 					if(grid[square[0]][square[1]]!=colorHex){
 						colorHex=grid[square[0]][square[1]];
 					}
@@ -153,8 +160,18 @@ var canvasGrid=(function(window,document,undefined){
 	function getGrid(){
 		return grid
 	}
+	function resetGrid(){
+		for(var i=0;i<size[0];i++){
+			for(var j=0;j<size[1];j++){
+				grid[i][j]="#ffffff"
+			}
+		}
+	}
 	function setTool(value){
 		tool=value;
+	}
+	function getTool(){
+		return tool;
 	}
 	function setSquare(x,y,color,secondColor){
 		context.clearRect(x*zoom*squareSize+1.5,y*zoom*squareSize+1.5,squareSize*zoom-2,squareSize*zoom-2)
@@ -195,6 +212,14 @@ var canvasGrid=(function(window,document,undefined){
 		}
 		return colorValue
 	}
+	function save(name){
+		var saveObj={};
+		saveObj.grid=grid;
+		saveObj.options={};
+		saveObj.options.zoom=zoom;
+		saveObj.options.tool=tool;
+		localStorage.setItem(name,JSON.stringify(saveObj));
+	}
 	return {
 		init:function(){
 			return init();
@@ -220,6 +245,12 @@ var canvasGrid=(function(window,document,undefined){
 		getGrid:function(){
 			return getGrid();
 		},
+		resetGrid:function(){
+			return resetGrid();
+		},
+		getTool:function(){
+			return getTool();
+		},
 		setTool:function(tool){
 			return setTool(tool);
 		},
@@ -228,6 +259,9 @@ var canvasGrid=(function(window,document,undefined){
 		},
 		getColorDetails:function(colorHex){
 			return getColorDetails(colorHex);
+		},
+		save:function(name){
+			return save(name);
 		}
 	}
 })(window, document);

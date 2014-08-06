@@ -91,6 +91,12 @@
 				</table>
 			</div>
 			<div class="tabContent" id="fileTabContent">
+				<div id="file" class="buttonContainer">
+					<div class="iconContainer"><a class="icon" id="new"></a></div>
+					<div class="iconContainer"><a class="icon" id="save"></a></div>
+					<div class="iconContainer"><a class="icon" id="load"></a></div>
+					<div id="loadOptions"></div>
+				</div>
 				<div id="tools" class="buttonContainer">
 					<div class="iconContainer active"><a class="icon" id="brush"></a></div>
 					<div class="iconContainer"><a class="icon" id="bucket"></a></div>
@@ -122,9 +128,7 @@
 			<div class="tabContent" id="debugTabContent">
 				<div id="I/O">
 					<input id="input" type="text">
-					<div id="output">
-						
-					</div>
+					<div id="output"></div>
 				</div>
 				<div id="interpreterControls" class="buttonContainer">
 					<div class="iconContainer"><a class="icon" id="play"></a></div>
@@ -142,7 +146,6 @@
 		<div id="canvasContainer">
 			<canvas id="canvas"></canvas>
 		</div>
-		<div id="debug"></div>
 	</div>
 	<script type="text/javascript" src="../UI/main.js"></script>
 	<script type="text/javascript" src="color.js"></script>

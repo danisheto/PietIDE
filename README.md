@@ -4,12 +4,12 @@ PietIDE
 A Piet interpreter and IDE
 
 Features:
-UI
+UI, Interpreter, piet code saving
 
 Features to Add:
-Interpreter-whitespace and restrictions
 Grid Coordinate System
 Animations for Position movement-show flow
 
 Features currently being worked on:
-Interpreter-whitespace and restrictions
+Display information,
+save options

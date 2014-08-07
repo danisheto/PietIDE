@@ -7,9 +7,18 @@ var canvasGrid=(function(window,document,undefined){
 		zoom=1,
 		colorHex="#000000",
 		tool="brush",
-		cursorOffset=[],
+		cursorOffset=[0,0],
 		offset=[0,0]
 	function init(){
+		if(window['localStorage']!=null && !!window.localStorage["dates"]){
+			dates=JSON.parse(window.localStorage["dates"])
+			lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
+			grid=lastDate.grid
+			zoom=lastDate.options.zoom;
+			tool=lastDate.options.tool;
+			size=lastDate.options.size;
+			offset=lastDate.options.canvasOffset;
+		}
 		initCanvas();
 		initEvents();
 	}
@@ -17,9 +26,11 @@ var canvasGrid=(function(window,document,undefined){
 		context.clearRect(0,0,size[0]*squareSize*zoom,size[1]*squareSize*zoom);
 		//initialize canvas size
 		canvas.width=squareSize*size[0]*zoom;
-		canvas.style.width=canvas.width;
+		canvas.style.width=canvas.width+"px";
 		canvas.height=squareSize*size[1]*zoom;
-		canvas.style.height=canvas.height;
+		canvas.style.height=canvas.height+"px";
+		canvas.style.left=offset[0]+"px";
+		canvas.style.top=offset[1]+"px";
 		if(zoom>=0.5){
 			context.beginPath();
 			for(var i=0;i<size[0];i++){
@@ -35,13 +46,7 @@ var canvasGrid=(function(window,document,undefined){
 			context.stroke();
 		}
 		if(!grid[size[0]-1]){
-			if(window['localStorage']!=null && !!window.localStorage["dates"]){
-				dates=JSON.parse(window.localStorage["dates"])
-				lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
-				grid=lastDate.grid
-				offset=lastDate.canvasOffset;
-				cursorOffset=lastDate.canvasCursorOffset;
-			}else{
+			if(window['localStorage']==null || !window.localStorage["dates"]){
 				for(var i=0;i<size[0];i++){
 					grid[i]=[];
 					for(var j=0;j<size[1];j++){
@@ -88,15 +93,14 @@ var canvasGrid=(function(window,document,undefined){
 				Math.floor(position[0]/(squareSize*zoom)),
 				Math.floor(position[1]/(squareSize*zoom))
 			]
+			$("#save").classList.remove("done");
 			switch(tool){
 				case "brush":
-					$("#save").classList.remove("done");
 					if(position[0]>=0 && position[1]>=0 && grid[square[0]][square[1]]!=colorHex){
 						draw(square[0],square[1]);
 					}
 					break;
 				case "bucket":
-					$("#save").classList.remove("done");
 					var stack=[square];
 					var colorPicked=grid[square[0]][square[1]];
 					while(stack.length){
@@ -116,7 +120,6 @@ var canvasGrid=(function(window,document,undefined){
 					}
 					break;
 				case "eyedropper":
-					$("#save").classList.remove("done");
 					if(grid[square[0]][square[1]]!=colorHex){
 						colorHex=grid[square[0]][square[1]];
 					}
@@ -212,13 +215,33 @@ var canvasGrid=(function(window,document,undefined){
 		}
 		return colorValue
 	}
-	function save(name){
+	function saveGrid(name, sidebarOffset){
 		var saveObj={};
 		saveObj.grid=grid;
 		saveObj.options={};
-		saveObj.options.zoom=zoom;
+		saveObj.options.active=$("#colorPalette").$(".active")[0].id;
+		saveObj.options.primary=window.getComputedStyle($("#primary")).getPropertyValue("background-color");
+		saveObj.options.secondary=window.getComputedStyle($("#secondary")).getPropertyValue("background-color");
 		saveObj.options.tool=tool;
+		saveObj.options.zoom=zoom;
+		saveObj.options.size=size;
+		saveObj.options.sidebarOffset=sidebarOffset;
+		saveObj.options.canvasOffset=offset;
 		localStorage.setItem(name,JSON.stringify(saveObj));
+	}
+	function saveOptions(){
+		var saveObj={};
+		saveObj.zoom=zoom;
+		saveObj.size=size;
+	}
+	function changeSize(size){
+		size=size;
+		canvasInit();
+	}
+	function move(x,y){
+		offset=[x,y]
+		canvas.style.left=x;
+		canvas.style.top=y
 	}
 	return {
 		init:function(){
@@ -260,8 +283,14 @@ var canvasGrid=(function(window,document,undefined){
 		getColorDetails:function(colorHex){
 			return getColorDetails(colorHex);
 		},
-		save:function(name){
-			return save(name);
+		saveGrid:function(name, sidebarOffset){
+			return saveGrid(name,sidebarOffset);
+		},
+		changeSize:function(size){
+			return changeSize(size)
+		},
+		move:function(x,y){
+			return move(x,y);
 		}
 	}
 })(window, document);

@@ -12,7 +12,7 @@
 <body>
 	<div id="webpage">
 		<div id="sidebar">
-			<nav id="tabs">
+			<nav class="tabs">
 				<a href="javascript:void(0)" id="colorsTab" class="tab active">Colors</a><a href="javascript:void(0)" id="fileTab" class="tab">File/Tools</a><a href="javascript:void(0)" id="debugTab" class="tab">Debug</a>
 			</nav>
 			<div id="colorPalette">
@@ -95,7 +95,41 @@
 					<div class="iconContainer"><a class="icon" id="new"></a></div>
 					<div class="iconContainer"><a class="icon" id="save"></a></div>
 					<div class="iconContainer"><a class="icon" id="load"></a></div>
-					<div id="loadOptions"></div>
+					<div class="iconContainer"><a class="icon" id="settings"></a></div>
+					<div class="arrow-up"></div>
+					<div id="display">
+						<div id="loadOptions"></div>
+						<div id="settingOptions">
+							<nav class="tabs" id="settingsTabs">
+								<a class="tab" href="javascript:void(0)">Defaults</a><a class="tab" href="javascript:void(0)">User Defaults</a><a href="javascript:void(0)" class="tab">Size</a>
+							</nav>
+							<div id="optionDefaults" class="tabContent">
+								<h3>Defaults: </h3>
+								<table>
+									<tr><td>Zoom Level</td><td>100%</td></tr>
+									<tr><td>Tool</td><td>brush</td></tr>
+									<tr><td>Primary Color</td><td>White</td></tr>
+									<tr><td>Secondary Color</td><td>Black</td></tr>
+									<tr><td>Active Color</td><td>Secondary</td></tr>
+									<tr><td>Active Tab</td><td>Colors</td></tr>
+								</table>
+								<a class="btn btn-md" href="javascript:void(0)" id="restoreDefaults">Restore Defaults</a>
+							</div>
+							<div id="userOptionDefaults" class="tabContent active">
+								<h3>User Defaults: </h3>
+								<table>
+									<tr><td>Zoom Level</td><td>100%</td></tr>
+									<tr><td>Tool</td><td>brush</td></tr>
+									<tr><td>Primary Color</td><td>White</td></tr>
+									<tr><td>Secondary Color</td><td>Black</td></tr>
+									<tr><td>Active Color</td><td>Secondary</td></tr>
+									<tr><td>Active Tab</td><td>Colors</td></tr>
+								</table>
+								<a class="btn btn-md" href="javascript:void(0)" id="restoreUserDefaults">Restore User Defaults</a>
+								<a class="btn btn-md" href="javascript:void(0)" id="saveUserDefaults">Save Current Settings as User Defaults</a>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div id="tools" class="buttonContainer">
 					<div class="iconContainer active"><a class="icon" id="brush"></a></div>
@@ -131,7 +165,7 @@
 					<div id="output"></div>
 				</div>
 				<div id="interpreterControls" class="buttonContainer">
-					<div class="iconContainer"><a class="icon" id="play"></a></div>
+					<!-- <div class="iconContainer"><a class="icon" id="play"></a></div> -->
 					<div class="iconContainer"><a class="icon" id="step"></a></div>
 					<div class="iconContainer"><a class="icon" id="stop"></a></div>
 				</div>

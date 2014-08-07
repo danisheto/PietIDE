@@ -29,10 +29,10 @@ html,body,#webpage{
 .tabContent{
 	display:none;
 }
-#tabs{
+.tabs{
 	padding:8px 0;
 }
-#tabs a{
+.tab{
 	text-decoration:none;
 	color:#000000;
 	padding:8px 12px;
@@ -40,7 +40,7 @@ html,body,#webpage{
 	border:solid 1px #DDDDDD;
 	border-radius:12px 12px 0 0;
 }
-#tabs a:hover,#tabs a:active,#tabs .active{
+.tab:hover,.tab:active,.tab.active{
 	background-color:#D2D2D2;
 	border-color:#BBBBBB;
 }
@@ -153,15 +153,39 @@ table{
 	height:22px;
 	margin:9px 0;
 }
+#load.active{
+	background-image:url(images/folder_open.png);
+	width:30px;
+	height:22px;
+	margin:9px 0 9px 3px;
+}
+#settings{
+	background-image:url(images/settings.png);
+	background-size:32px 32px;
+	width:32px;
+	height:32px;
+	margin:4px 0;
+}
+.arrow-up{
+	position:relative;
+	visibility:hidden;
+	top:5px;
+	height:0;
+	width:0;
+	border-left:10px solid transparent;
+	border-right:10px solid transparent;
+	border-bottom:10px solid #DDDDDD;
+}
+#display{
+	border:solid 1px #DDDDDD;
+	margin: 5px 0 12px 0;
+	font-weight:400;
+}
 #loadOptions{
 	display:none;
-	position:fixed;
-	background-color:white;
 	z-index:10;
 	padding:4px 10px 7px 10px;
-	border-radius:3px;
-	border:solid 1px #BBB;
-	left:13.2%;
+	left:11.08%;
 	margin-top:-2px;
 }
 #loadOptions a{
@@ -175,11 +199,46 @@ table{
 	color:#000;
 	border-bottom:dotted 1px #404040;
 }
-#load.active{
-	background-image:url(images/folder_open.png);
-	width:30px;
-	height:22px;
-	margin:9px 0;
+#settingsTabs{
+	margin-top:6px;
+}
+#settingsTabs .tab{
+	font-weight:100;
+	padding:8px 6px;
+	border-radius:0;
+}
+#settingOptions h3{
+	font-weight:300;
+	margin:10px 0;
+}
+.btn{
+	text-decoration:none;
+	font-weight:100;
+	font-size:1.1em;
+	color:#333;
+	display:inline-block;
+	background-color:#EEEEEE;
+	border:solid 1px #DDDDDD;
+	border-bottom-width:3px;
+	border-radius:2px;
+	padding:4px 20px;
+	margin:4px;
+}
+.btn:hover{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+	position:relative;
+	top:1px;
+	border-bottom-width:2px;
+	margin-bottom:5px;
+}
+.btn:active{
+	background-color:#D2D2D2;
+	border-color:#BBBBBB;
+	position:relative;
+	top:2px;
+	border-bottom-width:1px;
+	margin-bottom:6px;
 }
 #brush{
 	background-image:url(images/brush.png);

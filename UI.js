@@ -6,6 +6,21 @@ var pietUI=(function(window,document,undefined){
 		toolsInit();
 		debugInit();
 		colorPickerInit();
+		if(window['localStorage']!=null && !!window.localStorage["dates"]){
+			dates=JSON.parse(window.localStorage["dates"])
+			lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
+			sidebarOffset=lastDate.options.sidebarOffset;
+			$("#primary").style.backgroundColor=lastDate.options.primary;
+			$("#secondary").style.backgroundColor=lastDate.options.secondary;
+			$("#"+lastDate.options.active).classList.add("active");
+			$("#tools").$(".active")[0].classList.remove("active");
+			$("#"+lastDate.options.tool).parentNode.classList.add('active');
+			$("#zoomSlide").$("input")[0].value=lastDate.options.zoom*100;
+			$("#zoomSlide").$("input")[0].onchange.call($("#zoomSlide").$("input")[0]);
+			$("#save").classList.add("done")
+			$("#sidebar").style.left=lastDate.options.sidebarOffset[0]+"px";
+			$("#sidebar").style.top=lastDate.options.sidebarOffset[1]+"px";
+		}
 	}
 	function colorPickerInit(){
 		$("#colors").onmousedown=function(e){
@@ -18,7 +33,7 @@ var pietUI=(function(window,document,undefined){
 			$("#colorPalette").$(".active")[0].style.backgroundColor=canvasGrid.setColor("#000000");
 		}
 		$("#secondary").onmousedown=function(e){
-			$("#colorPalette").$(".active")[0].classList.remove("active");
+			$("#colorPalette").$(".active")[0].classList.remove("active");+"px"
 			this.classList.add("active");
 			$("#colorPalette").$(".active")[0].style.backgroundColor=canvasGrid.setColor(window.getComputedStyle(this).getPropertyValue("background-color"));
 		}
@@ -51,7 +66,7 @@ var pietUI=(function(window,document,undefined){
 				$("#save").classList.add("running");
 				var date=new Date();
 				date=("0000"+date.getFullYear()).slice(-4)+("0"+date.getMonth()).slice(-2)+("0"+date.getDate()).slice(-2)+("0"+date.getHours()).slice(-2)+("0"+date.getMinutes()).slice(-2)+("0"+date.getSeconds()).slice(-2)
-				canvasGrid.save(date);
+				canvasGrid.saveGrid(date,sidebarOffset);
 				if(localStorage["dates"]){
 					var dates=JSON.parse(localStorage.getItem("dates"));
 				}else{
@@ -66,6 +81,7 @@ var pietUI=(function(window,document,undefined){
 		$("#load").parentNode.onmousedown=function(e){
 			if($("#loadOptions").childNodes.length<1){
 				$("#load").classList.add("active");
+				$("#load").parentNode.classList.add('active')
 				dates=JSON.parse(localStorage.getItem("dates"));
 				if(!!dates){
 					for(var i=0;i<dates.length;i++){
@@ -81,32 +97,60 @@ var pietUI=(function(window,document,undefined){
 				$("#loadOptions").style.display="block";
 				document.onmousedown=function(e){
 					if(e.target.id!="loadOptions" && e.target.parentNode.id!="loadOptions" && e.target.childNodes!=$("#load").parentNode.childNodes && e.target.parentNode.childNodes!= $("#load").parentNode.childNodes){
-						console.log($("#load").parentNode.onmousedown)
 						$("#load").parentNode.onmousedown.call(this);
 					}
 				}
+				$(".arrow-up")[0].style.left="57.5%";
+				$(".arrow-up")[0].style.visibility="inherit"
 			}else{
 				$("#load").classList.remove("active")
+				$("#load").parentNode.classList.remove("active")
 				$("#loadOptions").style.display="";
 				while($("#loadOptions").lastChild){
 					$("#loadOptions").removeChild($("#loadOptions").lastChild)
 				}
 				document.onmousedown=null;
+				$(".arrow-up")[0].style.left="";
+				$(".arrow-up")[0].style.visibility="";
 			}
 		}
 		$("#loadOptions").onmousedown=function(e){
-			console.log(e.target.tagName)
 			if(e.target.tagName.toLowerCase()=="a"){
-				grid=JSON.parse(localStorage.getItem(e.target.dataset.date)).grid;
+				var option=JSON.parse(localStorage.getItem(e.target.dataset.date));
+				var grid=option.grid;
 				for(var i=0;i<grid.length;i++){
 					for(var j=0;j<grid[i].length;j++){
 						canvasGrid.setSquare(i,j,grid[i][j])
 					}
 				}
+				canvasGrid.setZoom(option.zoom);
+				$("#primary").style.backgroundColor=option.options.primary;
+				$("#secondary").style.backgroundColor=option.options.secondary;
+				$("#"+option.options.active).classList.add("active");
+				canvasGrid.setColor(window.getComputedStyle($("#"+option.options.active)).getPropertyValue("background-color"));
+				canvasGrid.setTool(option.options.tool);
+				$("#tools").$(".active")[0].classList.remove("active");
+				$("#"+option.options.tool).parentNode.classList.add('active');
+				console.log($("#zoomSlide").$("input"))
+				canvasGrid.setZoom(option.options.zoom);
+				$("#zoomSlide").$("input")[0].value=option.options.zoom*100;
+				$("#zoomSlide").$("input")[0].onchange.call($("#zoomSlide").$("input")[0]);
 				$("#save").classList.add("done")
+				canvasGrid.move(option.options.canvasOffset[0],option.options.canvasOffset[1]);
+				$("#sidebar").style.left=option.options.sidebarOffset[0]+"px";
+				$("#sidebar").style.top=option.options.sidebarOffset[1]+"px";
 				document.onmousedown=null;
 				$("#load").parentNode.onmousedown.call();
 			}
+		}
+		$("#settings").parentNode.onmousedown=function(e){
+			if($("#settingOptions").style.display==""){
+				$("#settingOptions").style.display="block";
+			}else{
+				$("#settingOptions").style.display="";
+			}
+		}
+		$("#settingOptions").onmousedown=function(e){
 		}
 		var zoomValues=[0.1,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.5,3,4,5];
 		function changeActive(e,el){
@@ -197,7 +241,7 @@ var pietUI=(function(window,document,undefined){
 			$("#debugTab").classList.add("active")
 		}
 		$("#sidebar").onmousedown=function(e){
-			if(canvasGrid.getTool()=="pan" && (e.target.parentNode.id=="sidebar" || e.target.parentNode.parentNode.id=="sidebar")){
+			if(canvasGrid.getTool()=="pan" && e.target.parentNode && (e.target.parentNode.id=="sidebar" || e.target.parentNode.parentNode.id=="sidebar")){
 				cursorOffset=[e.pageX,e.pageY];
 				document.body.style.cursor="move"
 			}
@@ -206,8 +250,6 @@ var pietUI=(function(window,document,undefined){
 			if(!!cursorOffset[0]){
 				$("#sidebar").style.left=(e.pageX-cursorOffset[0]+sidebarOffset[0])+"px";
 				$("#sidebar").style.top=(e.pageY-cursorOffset[1]+sidebarOffset[1])+"px";
-				console.log(sidebarOffset)
-
 			}
 		}
 		$("#sidebar").onmouseup=function(e){

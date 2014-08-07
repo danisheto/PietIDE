@@ -9,6 +9,7 @@ UI, Interpreter, piet code saving
 Features to Add:
 Grid Coordinate System
 Animations for Position movement-show flow
+Settings
 
 Features currently being worked on:
 Display information,

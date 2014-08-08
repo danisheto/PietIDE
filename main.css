@@ -20,7 +20,7 @@ html,body,#webpage{
 	border:solid 2px #DDDDDD;
 	margin:8px;
 	padding:8px;
-	width:calc(20% - 20px);
+	width:250px;
 	user-select:none;
 	-webkit-user-select:none;
 	-moz-user-select:none;
@@ -183,6 +183,7 @@ table{
 }
 #loadOptions{
 	display:none;
+	overflow-y:auto;
 	z-index:10;
 	padding:4px 10px 7px 10px;
 	left:11.08%;
@@ -198,6 +199,11 @@ table{
 #loadOptions a:hover{
 	color:#000;
 	border-bottom:dotted 1px #404040;
+}
+#settingOptions{
+	display:none;
+	overflow:hidden;
+	-webkit-transition:max-height 1s ease-in;
 }
 #settingsTabs{
 	margin-top:6px;
@@ -239,6 +245,9 @@ table{
 	top:2px;
 	border-bottom-width:1px;
 	margin-bottom:6px;
+}
+input.sm{
+	width:50px;
 }
 #brush{
 	background-image:url(images/brush.png);
@@ -299,7 +308,7 @@ table{
 }
 #canvasContainer{
 	margin-top:8px;
-	margin-left:calc(20% + 8px);
+	margin-left:300px;
 }
 #canvas{
 	position:relative;

@@ -10,19 +10,30 @@ var canvasGrid=(function(window,document,undefined){
 		cursorOffset=[0,0],
 		offset=[0,0]
 	function init(){
-		if(window['localStorage']!=null && !!window.localStorage["dates"]){
-			dates=JSON.parse(window.localStorage["dates"])
-			lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
-			grid=lastDate.grid
-			zoom=lastDate.options.zoom;
-			tool=lastDate.options.tool;
-			size=lastDate.options.size;
-			offset=lastDate.options.canvasOffset;
+		if(window['localStorage']!=null){
+			if(!!window.localStorage["dates"]){
+				dates=JSON.parse(window.localStorage["dates"])
+				lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
+				grid=lastDate.grid
+				zoom=lastDate.options.zoom;
+				tool=lastDate.options.tool;
+				size=lastDate.options.size;
+				offset=lastDate.options.canvasOffset;
+				colorHex=lastDate.options[lastDate.options.active];
+			}else{
+				options=JSON.parse(localStorage.getItem("userDefaults"))
+				zoom=options.zoom;
+				tool=options.tool;
+				size=options.size;
+				offset=options.canvasOffset;
+				colorHex=options[options.active];
+			}
 		}
 		initCanvas();
 		initEvents();
 	}
 	function initCanvas(){
+		console.log(grid)
 		context.clearRect(0,0,size[0]*squareSize*zoom,size[1]*squareSize*zoom);
 		//initialize canvas size
 		canvas.width=squareSize*size[0]*zoom;
@@ -33,11 +44,13 @@ var canvasGrid=(function(window,document,undefined){
 		canvas.style.top=offset[1]+"px";
 		if(zoom>=0.5){
 			context.beginPath();
+			//columns
 			for(var i=0;i<size[0];i++){
 				p=squareSize*zoom*i+0.5;
 				context.moveTo(p,0);
 				context.lineTo(p,size[1]*squareSize*zoom);
 			}
+			//rows
 			for(var i=0;i<size[1];i++){
 				p=squareSize*zoom*i+0.5;
 				context.moveTo(0,p);
@@ -45,7 +58,7 @@ var canvasGrid=(function(window,document,undefined){
 			}
 			context.stroke();
 		}
-		if(!grid[size[0]-1]){
+		if(!grid[size[0]-1] || !grid[size[0]-1][size[1]-1]){
 			if(window['localStorage']==null || !window.localStorage["dates"]){
 				for(var i=0;i<size[0];i++){
 					grid[i]=[];
@@ -220,8 +233,8 @@ var canvasGrid=(function(window,document,undefined){
 		saveObj.grid=grid;
 		saveObj.options={};
 		saveObj.options.active=$("#colorPalette").$(".active")[0].id;
-		saveObj.options.primary=window.getComputedStyle($("#primary")).getPropertyValue("background-color");
-		saveObj.options.secondary=window.getComputedStyle($("#secondary")).getPropertyValue("background-color");
+		saveObj.options.primary=new RGB(window.getComputedStyle($("#primary")).getPropertyValue("background-color")).toHex();
+		saveObj.options.secondary=new RGB(window.getComputedStyle($("#secondary")).getPropertyValue("background-color")).toHex();
 		saveObj.options.tool=tool;
 		saveObj.options.zoom=zoom;
 		saveObj.options.size=size;
@@ -234,14 +247,18 @@ var canvasGrid=(function(window,document,undefined){
 		saveObj.zoom=zoom;
 		saveObj.size=size;
 	}
-	function changeSize(size){
-		size=size;
-		canvasInit();
+	function changeSize(canvasSize){
+		size=canvasSize;
+		console.log(size)
+		initCanvas();
 	}
 	function move(x,y){
 		offset=[x,y]
 		canvas.style.left=x;
 		canvas.style.top=y
+	}
+	function getSize(){
+		return size
 	}
 	return {
 		init:function(){
@@ -291,6 +308,12 @@ var canvasGrid=(function(window,document,undefined){
 		},
 		move:function(x,y){
 			return move(x,y);
+		},
+		changeActiveColor:function(bool){
+			changeActiveColor(bool);
+		},
+		getSize:function(){
+			return getSize();
 		}
 	}
 })(window, document);

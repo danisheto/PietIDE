@@ -6,20 +6,47 @@ var pietUI=(function(window,document,undefined){
 		toolsInit();
 		debugInit();
 		colorPickerInit();
-		if(window['localStorage']!=null && !!window.localStorage["dates"]){
-			dates=JSON.parse(window.localStorage["dates"])
-			lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
-			sidebarOffset=lastDate.options.sidebarOffset;
-			$("#primary").style.backgroundColor=lastDate.options.primary;
-			$("#secondary").style.backgroundColor=lastDate.options.secondary;
-			$("#"+lastDate.options.active).classList.add("active");
-			$("#tools").$(".active")[0].classList.remove("active");
-			$("#"+lastDate.options.tool).parentNode.classList.add('active');
-			$("#zoomSlide").$("input")[0].value=lastDate.options.zoom*100;
-			$("#zoomSlide").$("input")[0].onchange.call($("#zoomSlide").$("input")[0]);
-			$("#save").classList.add("done")
-			$("#sidebar").style.left=lastDate.options.sidebarOffset[0]+"px";
-			$("#sidebar").style.top=lastDate.options.sidebarOffset[1]+"px";
+		if(window['localStorage']!=null){
+			if(!!window.localStorage["dates"]){
+				dates=JSON.parse(window.localStorage["dates"])
+				lastDate=JSON.parse(localStorage.getItem(dates[dates.length-1]))
+				sidebarOffset=lastDate.options.sidebarOffset;
+				$("#primary").style.backgroundColor=lastDate.options.primary;
+				$("#secondary").style.backgroundColor=lastDate.options.secondary;
+				$("#"+lastDate.options.active).classList.add("active");
+				$("#tools").$(".active")[0].classList.remove("active");
+				$("#"+lastDate.options.tool).parentNode.classList.add('active');
+				$("#zoomSlide").$("input")[0].value=lastDate.options.zoom*100;
+				$("#zoomSlide").$("input")[0].onchange.call($("#zoomSlide").$("input")[0]);
+				$("#save").classList.add("done")
+				$("#sidebar").style.left=lastDate.options.sidebarOffset[0]+"px";
+				$("#sidebar").style.top=lastDate.options.sidebarOffset[1]+"px";
+			}else{
+				userDefaults=JSON.parse(localStorage.getItem("userDefaults"));
+				$("#primary").style.backgroundColor=userDefaults.primaryColor;
+				$("#secondary").style.backgroundColor=userDefaults.secondaryColor;
+				$("#colorPalette").$(".active")[0].classList.remove("active")
+				$("#"+userDefaults.activeColor).classList.add("active");
+				$("#tools").$(".active")[0].classList.remove("active");
+				$("#"+userDefaults.tool).parentNode.classList.add('active');
+				$("#zoomSlide").$("input")[0].value=userDefaults.zoom*100;
+				$("#zoomSlide").$("input")[0].onchange.call($("#zoomSlide").$("input")[0]);
+				$("#save").classList.add("done");
+				sidebarOffset=[parseInt(userDefaults.sidebarOffset[0].slice(0,-2),10),parseInt(userDefaults.sidebarOffset[1].slice(0,-2),10)]
+				$("#sidebar").style.left=userDefaults.sidebarOffset[0];
+				$("#sidebar").style.top=userDefaults.sidebarOffset[1];
+				$("#canvasHeight").value=userDefaults.size[0];
+				$("#canvasWidth").value=userDefaults.size[1];
+				//change display
+				$("#userOptionDefaults").$("tr")[0].$("td")[1].innerHTML=userDefaults.zoom*100+"%";
+				$("#userOptionDefaults").$("tr")[1].$("td")[1].innerHTML=userDefaults.tool;
+				$("#userOptionDefaults").$("tr")[2].$("td")[1].innerHTML=userDefaults.primaryColor.toUpperCase();
+				$("#userOptionDefaults").$("tr")[3].$("td")[1].innerHTML=userDefaults.secondaryColor.toUpperCase();
+				$("#userOptionDefaults").$("tr")[4].$("td")[1].innerHTML=userDefaults.activeColor[0].toUpperCase()+userDefaults.activeColor.substring(1)
+				$("#userOptionDefaults").$("tr")[5].$("td")[1].innerHTML=userDefaults.size[0]*userDefaults.size[1];
+				$("#userOptionDefaults").$("tr")[6].$("td")[1].innerHTML=userDefaults.sidebarOffset.join(",");
+				$("#userOptionDefaults").$("tr")[7].$("td")[1].innerHTML=userDefaults.canvasOffset.join(",");
+			}
 		}
 	}
 	function colorPickerInit(){
@@ -73,15 +100,24 @@ var pietUI=(function(window,document,undefined){
 					var dates=[];
 				}
 				dates.push(date)
+				if($("#loadOptions").childNodes.length>=1){
+					var el=document.createElement("a");
+					el.href="javascript:void(0)";
+					el.textContent=date.slice(4,6)+"-"+date.slice(6,8)+"-"+date.slice(0,4)+" "+date.slice(8,10)+":"+date.slice(10,12)+":"+date.slice(12,14);
+					el.dataset.date=date
+					$("#loadOptions").appendChild(el)
+				}
 				localStorage.setItem("dates",JSON.stringify(dates));
 				$("#save").classList.remove("running");
-				$("#save").classList.add("done")
+				$("#save").classList.add("done");
 			}
 		}
 		$("#load").parentNode.onmousedown=function(e){
 			if($("#loadOptions").childNodes.length<1){
+				$("#settingOptions").style.display=""
 				$("#load").classList.add("active");
-				$("#load").parentNode.classList.add('active')
+				$("#load").parentNode.classList.add('active');
+				$("#settings").parentNode.classList.remove("active");
 				dates=JSON.parse(localStorage.getItem("dates"));
 				if(!!dates){
 					for(var i=0;i<dates.length;i++){
@@ -95,11 +131,6 @@ var pietUI=(function(window,document,undefined){
 					$("#loadOptions").textContent="none"
 				}
 				$("#loadOptions").style.display="block";
-				document.onmousedown=function(e){
-					if(e.target.id!="loadOptions" && e.target.parentNode.id!="loadOptions" && e.target.childNodes!=$("#load").parentNode.childNodes && e.target.parentNode.childNodes!= $("#load").parentNode.childNodes){
-						$("#load").parentNode.onmousedown.call(this);
-					}
-				}
 				$(".arrow-up")[0].style.left="57.5%";
 				$(".arrow-up")[0].style.visibility="inherit"
 			}else{
@@ -146,11 +177,95 @@ var pietUI=(function(window,document,undefined){
 		$("#settings").parentNode.onmousedown=function(e){
 			if($("#settingOptions").style.display==""){
 				$("#settingOptions").style.display="block";
+				$("#loadOptions").style.display="";
+				$("#load").classList.remove("active");
+				$("#load").parentNode.classList.remove("active");
+				$(".arrow-up")[0].style.left="80%";
+				$(".arrow-up")[0].style.visibility="inherit";
+				$("#settings").parentNode.classList.add("active");
+				$("#load").classList.remove("active")
+				$("#load").parentNode.classList.remove("active")
+				$("#loadOptions").style.display="";
+				while($("#loadOptions").lastChild){
+					$("#loadOptions").removeChild($("#loadOptions").lastChild)
+				}
+				document.onmousedown=null;
+				$(".arrow-up")[0].style.left="";
+				$(".arrow-up")[0].style.visibility="";
 			}else{
 				$("#settingOptions").style.display="";
+				$(".arrow-up")[0].style.left="";
+				$(".arrow-up")[0].style.visibility="";
+				$("#settings").parentNode.classList.remove("active");
 			}
 		}
-		$("#settingOptions").onmousedown=function(e){
+		$("#restoreDefaults").onclick=function(e){
+			canvasGrid.setZoom(1);
+			$("#zoomLevel").innerHTML="Zoom: 100%";
+			$("#zoomSlide").$("input")[0].value="100";
+			canvasGrid.setTool("brush");
+			$("#tools").$(".active")[0].classList.remove("active");
+			$("#brush").parentNode.classList.add("active");
+			canvasGrid.setColor("#000000");
+			$("#primary").style.backgroundColor="";
+			$("#secondary").style.backgroundColor="";
+			$("#colorPalette").$(".active")[0].classList.remove("active");
+			$("#sidebarTabs").$(".active")[0].classList.remove("active");
+			Array.prototype.slice.call($("#sidebar").children).filter(function(value, index, array){return value.classList.contains("active")})[0].classList.remove("active")
+			$("#primary").classList.add('active');
+			$("#settingOptions").style.display="";
+			$("#file").$(".active")[0].classList.remove('active');
+		}
+		$("#restoreUserDefaults").onclick=function(e){
+			var userDefaults=JSON.parse(localStorage.getItem("userDefaults"))
+			canvasGrid.setZoom(userDefaults.zoom);
+			$("#zoomLevel").innerHTML="Zoom: "+userDefaults.zoom*100+"%";
+			$("#zoomSlide").$("input")[0].value=userDefaults.zoom*100;
+			canvasGrid.setTool(userDefaults.tool);
+			$("#tools").$(".active")[0].classList.remove("active");
+			$("#"+userDefaults.tool).parentNode.classList.add("active");
+			$("#colorPalette").$(".active")[0].classList.remove("active");
+			canvasGrid.setColor(userDefaults[userDefaults.activeColor+"Color"]);
+			$("#"+userDefaults.activeColor).classList.add('active');
+			console.log(userDefaults.secondaryColor)
+			$("#primary").style.backgroundColor=userDefaults.primaryColor;
+			$("#secondary").style.backgroundColor=userDefaults.secondaryColor;
+			$("#sidebar").style.left=userDefaults.sidebarOffset[0];
+			$("#sidebar").style.top=userDefaults.sidebarOffset[1];
+			canvasGrid.changeSize(userDefaults.size)
+			$("#canvasHeight").value=userDefaults.size[0];
+			$("#canvasWidth").value=userDefaults.size[1];
+		}
+		$("#saveUserDefaults").onclick=function(e){
+			var userDefaults={
+				"zoom":canvasGrid.getZoom(),
+				"tool":canvasGrid.getTool(),
+				"primaryColor":new RGB(window.getComputedStyle($("#primary")).getPropertyValue("background-color")).toHex(),
+				"secondaryColor":new RGB(window.getComputedStyle($("#secondary")).getPropertyValue("background-color")).toHex(),
+				"activeColor":"primary",
+				"size":canvasGrid.getSize(),
+				"sidebarOffset":[$("#sidebar").style.left || 0, $("#sidebar").style.top || 0],
+				"canvasOffset":[$("#canvas").style.left || 0, $("#canvas").style.top || 0]
+			}
+			if(canvasGrid.getCurrentColor()!=userDefaults.primaryColor){
+				userDefaults.activeColor="secondary"
+			}
+			localStorage.setItem("userDefaults",JSON.stringify(userDefaults))
+			//change display
+			$("#userOptionDefaults").$("tr")[0].$("td")[1].innerHTML=userDefaults.zoom*100+"%";
+			$("#userOptionDefaults").$("tr")[1].$("td")[1].innerHTML=userDefaults.tool;
+			$("#userOptionDefaults").$("tr")[2].$("td")[1].innerHTML=userDefaults.primaryColor.toUpperCase();
+			$("#userOptionDefaults").$("tr")[3].$("td")[1].innerHTML=userDefaults.secondaryColor.toUpperCase();
+			$("#userOptionDefaults").$("tr")[4].$("td")[1].innerHTML=userDefaults.activeColor[0].toUpperCase()+userDefaults.activeColor.substring(1)
+			$("#userOptionDefaults").$("tr")[5].$("td")[1].innerHTML=userDefaults.size[0]*userDefaults.size[1];
+			$("#userOptionDefaults").$("tr")[6].$("td")[1].innerHTML=userDefaults.sidebarOffset[0].slice(0,-2)+","+userDefaults.sidebarOffset[1].slice(0,-2)
+			$("#userOptionDefaults").$("tr")[7].$("td")[1].innerHTML=userDefaults.canvasOffset[0].slice(0,-2)+","+userDefaults.canvasOffset[1].slice(0,-2)
+		}
+		$("#changeSize").onclick=function(e){
+			var newSize=[];
+			newSize[0]=parseInt($("#canvasWidth").value,10);
+			newSize[1]=parseInt($("#canvasHeight").value,10);
+			canvasGrid.changeSize(newSize)
 		}
 		var zoomValues=[0.1,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.5,3,4,5];
 		function changeActive(e,el){
@@ -258,6 +373,24 @@ var pietUI=(function(window,document,undefined){
 				cursorOffset=[]
 				document.body.style.cursor="";
 			}
+		}
+		$("#optionsDefaultTab").onmousedown=function(){
+			$("#settingsTabs").$(".active")[0].classList.remove("active");
+			$("#settingOptions").$(".active")[0].classList.remove("active")
+			this.classList.add("active");
+			$("#optionDefaults").classList.add("active");
+		}
+		$("#optionUserDefaultTab").onmousedown=function(){
+			$("#settingsTabs").$(".active")[0].classList.remove("active");
+			$("#settingOptions").$(".active")[0].classList.remove("active")
+			this.classList.add("active");
+			$("#userOptionDefaults").classList.add("active");
+		}
+		$("#optionSizeTab").onmousedown=function(){
+			$("#settingsTabs").$(".active")[0].classList.remove("active");
+			$("#settingOptions").$(".active")[0].classList.remove("active")
+			this.classList.add("active");
+			$("#optionSize").classList.add("active");
 		}
 	}
 	function setColorActive(color){
